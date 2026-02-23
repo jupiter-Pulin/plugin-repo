@@ -924,7 +924,7 @@ test('Nearly Complete status — request-stale fires, no feature-complete', () =
 // ---------------------------------------------------------------------------
 // Test 36: next_actions commands use qualified format
 // ---------------------------------------------------------------------------
-test('next_actions commands use qualified /sd0x-dev-flow: prefix', () => {
+test('next_actions commands use qualified /jupiter-dev-flow: prefix', () => {
   const dir = createTempRepo();
   // Code changed, no review → P0 findings → next_actions with commands
   mkdirSync(join(dir, 'src'), { recursive: true });
@@ -940,7 +940,7 @@ test('next_actions commands use qualified /sd0x-dev-flow: prefix', () => {
   assert.ok(withCommands.length > 0, 'Should have next_actions with commands');
   for (const action of withCommands) {
     assert.ok(
-      action.command.startsWith('/sd0x-dev-flow:'),
+      action.command.startsWith('/jupiter-dev-flow:'),
       `Expected qualified command, got: ${action.command}`
     );
   }

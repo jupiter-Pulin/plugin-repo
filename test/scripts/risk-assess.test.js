@@ -412,7 +412,7 @@ test('untracked files — included in change_scope metrics', () => {
 // ---------------------------------------------------------------------------
 // Test 23: next_actions commands use qualified format when present
 // ---------------------------------------------------------------------------
-test('next_actions commands use qualified /sd0x-dev-flow: prefix when present', () => {
+test('next_actions commands use qualified /jupiter-dev-flow: prefix when present', () => {
   const dir = createTempRepo();
   // High risk + high breaking surface to generate next_actions with commands
   // Create many exports then remove them all
@@ -434,7 +434,7 @@ test('next_actions commands use qualified /sd0x-dev-flow: prefix when present', 
   if (withCommands.length > 0) {
     for (const action of withCommands) {
       assert.ok(
-        action.command.startsWith('/sd0x-dev-flow:'),
+        action.command.startsWith('/jupiter-dev-flow:'),
         `Expected qualified command, got: ${action.command}`
       );
     }
@@ -442,7 +442,7 @@ test('next_actions commands use qualified /sd0x-dev-flow: prefix when present', 
     // Even without triggered commands, verify no unqualified commands leak through
     const allCommands = output.next_actions.map(a => a.command).filter(Boolean);
     for (const cmd of allCommands) {
-      assert.ok(!cmd.startsWith('/') || cmd.startsWith('/sd0x-dev-flow:'), `Unexpected unqualified command: ${cmd}`);
+      assert.ok(!cmd.startsWith('/') || cmd.startsWith('/jupiter-dev-flow:'), `Unexpected unqualified command: ${cmd}`);
     }
   }
 });
