@@ -28,7 +28,7 @@ sequenceDiagram
         R-->>A: Review result
     else Reject
         U-->>A: ❌
-        A->>A: git checkout
+        A->>A: Report diff, ask user to revert manually
     else Modify
         U-->>A: 🔄 + suggestions
         A->>X: Regenerate
@@ -64,7 +64,8 @@ Identify and follow project patterns:
 | Pattern    | Files                            | Description            |
 | ---------- | -------------------------------- | ---------------------- |
 | Service    | `src/service/*.service.ts`       | Business logic         |
-| Provider   | `src/provider/**/*.ts`           | External service wrapper |
+| Entity     | `src/entity/**/*.ts`             | Business domain module (entity-centric) |
+| Provider   | `src/provider/**/*.ts`           | External service wrapper (provider-centric) |
 | Controller | `src/controller/*.controller.ts` | API endpoints          |
 | Config     | `src/config/*.ts`                | Configuration          |
 
@@ -83,7 +84,7 @@ git ls-files --others --exclude-standard  # New files
 | Option     | Action                            |
 | ---------- | --------------------------------- |
 | ✅ Accept  | Keep changes, run review          |
-| ❌ Reject  | `git checkout . && git clean -fd` |
+| ❌ Reject  | Report diff → inform user to manually revert |
 | 🔄 Modify  | Collect suggestions, regenerate   |
 
 ## Automatic Review
@@ -125,6 +126,6 @@ After accepting changes, must execute:
 
 | Error         | Action                      |
 | ------------- | --------------------------- |
-| Codex failed  | Restore stash, report error |
-| User rejected | `git checkout .`            |
+| Codex failed  | Preserve worktree, report error, request user decision |
+| User rejected | Report diff, inform user to manually revert            |
 | Review failed | Enter Review Loop           |

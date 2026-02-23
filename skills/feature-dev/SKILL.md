@@ -56,7 +56,9 @@ Requirements -> Design -> Implement -> Test -> Review -> Commit -> Doc Sync
 
 | Change Type               | Test Requirements                           |
 | ------------------------- | ------------------------------------------- |
-| New Service/Provider      | Must have corresponding unit test           |
+| New Service               | Must have corresponding unit test           |
+| New Entity                | Must have corresponding protocol test       |
+| New Provider              | Must have corresponding unit test           |
 | Modify existing logic     | Ensure existing tests pass + new logic tested |
 | Bug fix                   | Must add regression test                    |
 
@@ -64,7 +66,8 @@ Requirements -> Design -> Implement -> Test -> Review -> Commit -> Doc Sync
 
 ```
 src/service/xxx.service.ts       -> test/unit/service/xxx.service.test.ts
-src/provider/evm/parser.ts       -> test/unit/provider/evm/parser.test.ts
+src/entity/xxx/xxx.service.ts    -> test/protocol/xxx.test.ts (entity-centric)
+src/provider/evm/parser.ts       -> test/unit/provider/evm/parser.test.ts (provider-centric)
 src/controller/xxx.controller.ts -> test/integration/controller/xxx.test.ts
 ```
 

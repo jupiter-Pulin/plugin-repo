@@ -4,7 +4,7 @@
 
 - `{CONFIG_FILE}` - ILifeCycle
 - `{BOOTSTRAP_FILE}` - Bootstrap entry
-- `src/provider/factory.ts` - Provider factory
+- `src/entity/` or `src/provider/factory.ts` - Business entry (entity-centric or provider factory)
 
 ## Test Patterns
 

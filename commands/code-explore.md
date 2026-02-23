@@ -12,6 +12,7 @@ allowed-tools: Read, Grep, Glob, Bash(ls:*), Bash(find:*)
 
 - Project root: !`git rev-parse --show-toplevel`
 - Services: !`ls src/service/ 2>/dev/null | head -10`
+- Entities: !`ls src/entity/ 2>/dev/null | head -10`
 - Providers: !`ls src/provider/ 2>/dev/null | head -10`
 
 ## Task

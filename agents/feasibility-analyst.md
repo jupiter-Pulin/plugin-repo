@@ -71,7 +71,7 @@ Inventory all constraints:
 grep -r "keyword" src/ --include="*.ts" -l | head -10
 
 # View existing architecture
-ls src/service/ src/provider/
+ls src/service/ src/entity/ 2>/dev/null; ls src/provider/ 2>/dev/null
 
 # Analyze similar features
 cat src/service/xxx.service.ts | head -100

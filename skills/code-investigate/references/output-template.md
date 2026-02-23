@@ -42,7 +42,7 @@
 | File                  | Purpose              |
 | --------------------- | -------------------- |
 | `src/service/xxx.ts`  | Main processing logic|
-| `src/provider/yyy.ts` | External data source |
+| `src/entity/yyy.ts` or `src/provider/yyy.ts` | Business module / External data source |
 
 ### Core Logic
 

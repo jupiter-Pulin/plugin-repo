@@ -41,7 +41,7 @@ ls -la <file paths mentioned in spec>
 grep -r "related keyword" src/ --include="*.ts" | head -20
 
 # Check existing design patterns
-cat src/provider/basic/provider.basic.ts | head -50
+ls src/entity/ 2>/dev/null | head -10; cat src/provider/basic/provider.basic.ts 2>/dev/null | head -50
 ```
 
 #### Step 3: Completeness Check

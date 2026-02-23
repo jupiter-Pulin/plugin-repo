@@ -71,9 +71,9 @@ context: fork
 | --------------- | -------------------------------------------------------- |
 | Feature entry   | `Grep "export class.*Controller"` / `Grep "@Get\|@Post"` |
 | Service layer   | `Grep "export class.*Service"`                           |
-| Provider layer  | `Glob "src/provider/**/*.ts"`                            |
+| Business modules| `Glob "src/entity/**/*.ts"` or `Glob "src/provider/**/*.ts"` |
 | Configuration   | `Read {CONFIG_FILE}`                                     |
-| Data models     | `Glob "src/model/**/*.ts"`                               |
+| Data models     | `Glob "src/entity/**/*.ts"` or `Glob "src/model/**/*.ts"` |
 
 ## Output Format
 

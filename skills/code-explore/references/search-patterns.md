@@ -3,14 +3,22 @@
 ## Project Structure
 
 ```
+# Nest-style (provider/model centric)
 src/
 ├── controller/     # API entry points
 ├── service/        # Business logic
 ├── provider/       # External service integration
-│   ├── evm/
-│   ├── btc/
-│   └── sol/
 ├── model/          # Data models
+├── config/         # Configuration
+└── configuration.ts # DI configuration
+
+# Midway/Entity-centric style
+src/
+├── controller/     # API entry points
+├── entity/         # Business modules (domain logic + models)
+│   ├── <domain>/
+│   └── <domain>/
+├── service/        # Shared infrastructure (cache, onchain, kafka, etc.)
 ├── config/         # Configuration
 └── configuration.ts # DI configuration
 ```
@@ -43,14 +51,14 @@ Grep "async getBalance"
 Grep "@Inject().*Service"
 ```
 
-### Find Provider Implementations
+### Find Business Modules
 
 ```bash
-# List all providers
-Glob "src/provider/**/*.ts"
+# Entity-centric projects (Midway/Earn style)
+Glob "src/entity/**/*.ts"
 
-# Find specific chain implementation
-Glob "src/provider/evm/*.ts"
+# Provider-centric projects (Nest style)
+Glob "src/provider/**/*.ts"
 
 # Find factory
 Grep "ProviderFactory|getProvider"
@@ -59,7 +67,10 @@ Grep "ProviderFactory|getProvider"
 ### Find Data Models
 
 ```bash
-# Find all models
+# Entity-centric: models live inside entity/
+Glob "src/entity/**/*.ts"
+
+# Provider-centric: dedicated model directory
 Glob "src/model/**/*.ts"
 
 # Find MongoDB collections
@@ -104,10 +115,14 @@ Grep "redis|mongo|rpc" --glob "*.config.ts"
 ### Find Related Tests
 
 ```bash
-# Corresponding unit test
+# Unit test (check both conventions)
 test/unit/service/{ServiceName}.test.ts
+test/protocol/{ProtocolName}.test.ts
 
-# Corresponding integration test
+# Fallback: search all test files
+Glob "test/**/*.test.ts"
+
+# Integration test
 test/integration/controller/{ControllerName}.test.ts
 ```
 

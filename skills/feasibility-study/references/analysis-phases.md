@@ -29,7 +29,7 @@ Research existing code capabilities:
 grep -r "related keyword" src/ -l | head -20
 
 # Check existing implementations
-ls src/service/ src/provider/
+ls src/service/ src/entity/ 2>/dev/null; ls src/provider/ 2>/dev/null
 ```
 
 **Must verify**:

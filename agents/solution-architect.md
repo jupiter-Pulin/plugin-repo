@@ -42,7 +42,7 @@ solution     with code  paths
 grep -r "keyword" src/ --include="*.ts" -l
 
 # Analyze existing architecture
-ls src/service/ src/provider/
+ls src/service/ src/entity/ 2>/dev/null; ls src/provider/ 2>/dev/null
 
 # View similar feature implementations
 cat src/service/xxx.service.ts | head -100

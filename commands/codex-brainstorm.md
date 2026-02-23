@@ -13,6 +13,7 @@ allowed-tools: mcp__codex__codex, mcp__codex__codex-reply, Read, Grep, Glob, Bas
 - Project root: !`git rev-parse --show-toplevel`
 - Project structure: !`ls -la src/ 2>/dev/null | head -15`
 - Services: !`ls src/service/ 2>/dev/null | head -10`
+- Entities: !`ls src/entity/ 2>/dev/null | head -10`
 - Providers: !`ls src/provider/ 2>/dev/null | head -10`
 
 ## Task

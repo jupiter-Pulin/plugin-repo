@@ -334,7 +334,3 @@ PRs welcome. Please:
 ## License
 
 MIT
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=jupiter-Pulin/plugin-repo&type=date&legend=top-left)](https://www.star-history.com/#jupiter-Pulin/plugin-repo&type=date&legend=top-left)

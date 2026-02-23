@@ -66,7 +66,7 @@ Read source → Derive test path → Codex generate → Save test file → Sugge
 ### Steps
 
 1. Read source file
-2. Derive test path: `src/service/xxx.ts` → `test/unit/service/xxx.test.ts`
+2. Derive test path: `src/service/xxx.ts` → `test/unit/service/xxx.test.ts`; `src/entity/xxx/` → `test/protocol/xxx.test.ts` (fallback: `test/**/*.test.ts`)
 3. Codex generates tests. See @references/codex-prompt-test-gen.md.
 4. Save to target path
 5. Suggest: run tests then `/codex-test-review`

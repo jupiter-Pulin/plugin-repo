@@ -48,8 +48,7 @@ Extract from docs:
 ```bash
 # Check related source code
 ls src/service/ | grep -i "<keyword>"
-ls src/provider/ | grep -i "<keyword>"
-ls src/entity/ | grep -i "<keyword>"
+ls src/entity/ 2>/dev/null | grep -i "<keyword>"; ls src/provider/ 2>/dev/null | grep -i "<keyword>"
 
 # Check recent changes
 git log --oneline -20 --all -- "src/**/*<keyword>*"

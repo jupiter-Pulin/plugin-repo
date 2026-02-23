@@ -45,7 +45,7 @@ Before forming any conclusions, you **must** perform the following research:
 
 ### 1. Project Structure Understanding
 - Run \`ls src/\` to understand directory structure
-- Run \`ls src/service/\` and \`ls src/provider/\` to understand existing modules
+- Run \`ls src/service/\` and \`ls src/entity/ 2>/dev/null; ls src/provider/ 2>/dev/null\` to understand existing modules
 
 ### 2. Related Code Search
 - Search keywords related to the topic: \`grep -r "keyword" src/ --include="*.ts" -l | head -10\`

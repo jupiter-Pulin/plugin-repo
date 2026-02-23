@@ -36,8 +36,10 @@ Full spec: @rules/auto-loop.md
 
 | Change Type | Required Tests | File Mapping |
 |-------------|---------------|--------------|
-| New Service/Provider | `test/unit/` required | `src/service/xxx.ts` -> `test/unit/service/xxx.test.ts` |
-| Modify existing logic | Existing pass + new logic | `src/provider/*.ts` -> `test/unit/provider/*.test.ts` |
+| New Service | `test/unit/` required | `src/service/xxx.ts` -> `test/unit/service/xxx.test.ts` |
+| New Entity | project-convention test required | `src/entity/xxx/` -> `test/protocol/xxx.test.ts` and `test/protocol/xxx/anvil/tokenName.fork.test.ts` |
+| New Provider | `test/unit/` required | `src/provider/*.ts` -> `test/unit/provider/*.test.ts` |
+| Modify existing logic | Existing pass + new logic | `src/entity/*.ts` or `src/provider/*.ts` -> `test/**/*.test.ts` |
 | Bug fix | Regression test | - |
 | New API endpoint | Unit + Integration | `src/controller/*.ts` -> `test/integration/controller/*.test.ts` |
 

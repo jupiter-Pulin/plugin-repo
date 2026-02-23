@@ -14,7 +14,8 @@
 
 ```
 src/service/xxx.ts       → test/unit/service/xxx.test.ts
-src/provider/xxx.ts      → test/unit/provider/xxx.test.ts
+src/entity/xxx/          → test/protocol/xxx.test.ts (entity-centric)
+src/provider/xxx.ts      → test/unit/provider/xxx.test.ts (provider-centric)
 src/controller/xxx.ts    → test/integration/controller/xxx.test.ts
 User flow                → test/e2e/xxx.test.ts
 ```

@@ -40,7 +40,7 @@ Research the existing codebase thoroughly:
 grep -r "keyword" src/ --include="*.ts" -l | head -10
 
 # Check similar features
-ls src/service/ src/provider/
+ls src/service/ src/entity/ 2>/dev/null; ls src/provider/ 2>/dev/null
 
 # Analyze specific implementation
 cat src/service/similar.service.ts | head -100

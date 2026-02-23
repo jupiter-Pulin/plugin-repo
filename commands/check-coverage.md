@@ -36,11 +36,9 @@ Search related source code based on feature documentation:
 # Search related Services
 ls src/service/ | grep -i "<keyword>"
 
-# Search related Providers
-ls src/provider/ | grep -i "<keyword>"
-
-# Search related Entities
-ls src/entity/ | grep -i "<keyword>"
+# Search related Entities / Providers
+ls src/entity/ 2>/dev/null | grep -i "<keyword>"
+ls src/provider/ 2>/dev/null | grep -i "<keyword>"
 ```
 
 Build source code inventory:

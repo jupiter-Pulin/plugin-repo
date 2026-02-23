@@ -59,7 +59,7 @@ ${MODE} (design/review/compare)
 Before providing architecture advice, you **must** perform the following research:
 
 ### Research Steps
-1. Understand project structure: \`ls src/\`, \`ls src/service/\`, \`ls src/provider/\`
+1. Understand project structure: \`ls src/\`, \`ls src/service/\`, \`ls src/entity/ 2>/dev/null; ls src/provider/ 2>/dev/null\`
 2. Search related modules: \`grep -r "keyword" src/ --include="*.ts" -l | head -10\`
 3. Read existing implementations: \`cat <relevant files> | head -150\`
 4. Understand existing architecture patterns and conventions
