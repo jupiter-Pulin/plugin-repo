@@ -14,7 +14,7 @@ const scriptPath = resolve(__dirname, '../../skills/risk-assess/scripts/risk-ana
 const tempDirs = [];
 
 function createTempRepo() {
-  const dir = mkdtempSync(join(tmpdir(), 'sd0x-risk-'));
+  const dir = mkdtempSync(join(tmpdir(), 'jupiter-risk-'));
   tempDirs.push(dir);
   execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
   execFileSync(

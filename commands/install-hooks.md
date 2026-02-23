@@ -13,7 +13,7 @@ allowed-tools: Read, Glob, Write, Bash(mkdir:*), Bash(diff:*), Bash(git:*), Bash
 
 ## Task
 
-Install sd0x-dev-flow plugin hooks into the current project's `.claude/` directory so they persist even without the plugin loaded. This involves two layers: copying hook scripts and merging hook definitions into settings.
+Install jupiter-dev-flow plugin hooks into the current project's `.claude/` directory so they persist even without the plugin loaded. This involves two layers: copying hook scripts and merging hook definitions into settings.
 
 ### Workflow
 
@@ -58,8 +58,8 @@ Find the plugin's `hooks/` directory using this priority (short-circuit on first
 1. **Glob search** — search known Claude plugin locations:
 
    ```
-   Glob: ~/.claude/plugins/**/sd0x-dev-flow/hooks/pre-edit-guard.sh
-   Glob: ${REPO_ROOT}/node_modules/sd0x-dev-flow/hooks/pre-edit-guard.sh
+   Glob: ~/.claude/plugins/**/jupiter-dev-flow/hooks/pre-edit-guard.sh
+   Glob: ${REPO_ROOT}/node_modules/jupiter-dev-flow/hooks/pre-edit-guard.sh
    ```
 
 2. **Plugin-relative fallback** — since this command is loaded from the plugin, try reading `@hooks/pre-edit-guard.sh` to confirm accessibility. If readable, derive the hooks directory by resolving the path returned (parent of `pre-edit-guard.sh`).
@@ -76,7 +76,7 @@ Read all `.sh` files from the discovered hooks directory. The available hooks ar
 | `post-tool-review-state.sh` | PostToolUse | Bash, mcp__codex__codex, mcp__codex__codex-reply | Parse review results, update state file |
 | `stop-guard.sh` | Stop | — | Check review + precommit completed before stop |
 
-> **Note**: The plugin's `SessionStart` hook (`namespace-hint.sh`) is intentionally excluded — it emits plugin-namespaced command guidance (`/sd0x-dev-flow:...`) which is incorrect for local installations where commands are accessed without namespace prefix.
+> **Note**: The plugin's `SessionStart` hook (`namespace-hint.sh`) is intentionally excluded — it emits plugin-namespaced command guidance (`/jupiter-dev-flow:...`) which is incorrect for local installations where commands are accessed without namespace prefix.
 
 If `--list` is specified, output this table and **stop**.
 

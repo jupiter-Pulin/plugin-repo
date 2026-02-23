@@ -113,9 +113,9 @@ if [[ "$USE_STATE_FILE" == "false" ]]; then
   HAS_DOC_CHANGE=$(echo "$CONVERSATION" | grep -E '\.(md|mdx)"' | grep -E '"(Edit|Write)"' | head -1 || true)
 
   # Check if required commands were executed
-  HAS_CODEX_REVIEW=$(echo "$CONVERSATION" | grep -oE '/(sd0x-dev-flow:)?codex-review(-fast|-branch)?($|[[:space:]])' | tail -1 || true)
-  HAS_PRECOMMIT=$(echo "$CONVERSATION" | grep -oE '/(sd0x-dev-flow:)?precommit(-fast)?($|[[:space:]])' | tail -1 || true)
-  HAS_REVIEW_DOC=$(echo "$CONVERSATION" | grep -oE '/(sd0x-dev-flow:)?codex-review-doc($|[[:space:]])|/(sd0x-dev-flow:)?review-spec($|[[:space:]])' | tail -1 || true)
+  HAS_CODEX_REVIEW=$(echo "$CONVERSATION" | grep -oE '/(jupiter-dev-flow:)?codex-review(-fast|-branch)?($|[[:space:]])' | tail -1 || true)
+  HAS_PRECOMMIT=$(echo "$CONVERSATION" | grep -oE '/(jupiter-dev-flow:)?precommit(-fast)?($|[[:space:]])' | tail -1 || true)
+  HAS_REVIEW_DOC=$(echo "$CONVERSATION" | grep -oE '/(jupiter-dev-flow:)?codex-review-doc($|[[:space:]])|/(jupiter-dev-flow:)?review-spec($|[[:space:]])' | tail -1 || true)
 
   # Check review results (standard sentinel — includes doc review sentinels ✅ Mergeable / ✅ Ready)
   REVIEW_PASSED=$(echo "$CONVERSATION" | grep -E '## Gate: ✅|✅ All Pass|✅ Mergeable|✅ Ready|Gate.*PASS' | tail -1 || true)

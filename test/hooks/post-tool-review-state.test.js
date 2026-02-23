@@ -27,7 +27,7 @@ function writeExecutable(filePath, content) {
 }
 
 function setupStubBin() {
-  const binDir = makeTempDir('sd0x-post-tool-bin-');
+  const binDir = makeTempDir('jupiter-post-tool-bin-');
   const stubJq = `#!/usr/bin/env node
 const fs = require('fs');
 const args = process.argv.slice(2);
@@ -197,7 +197,7 @@ after(() => {
 });
 
 test('/codex-review-fast pass sets code_review passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-');
+  const workDir = makeTempDir('jupiter-post-tool-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -214,7 +214,7 @@ test('/codex-review-fast pass sets code_review passed true', () => {
 });
 
 test('/codex-review-fast block sets code_review passed false', () => {
-  const workDir = makeTempDir('sd0x-post-tool-block-');
+  const workDir = makeTempDir('jupiter-post-tool-block-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -231,7 +231,7 @@ test('/codex-review-fast block sets code_review passed false', () => {
 });
 
 test('/codex-review-doc pass sets doc_review passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-doc-');
+  const workDir = makeTempDir('jupiter-post-tool-doc-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -248,7 +248,7 @@ test('/codex-review-doc pass sets doc_review passed true', () => {
 });
 
 test('/precommit pass sets precommit passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-precommit-');
+  const workDir = makeTempDir('jupiter-post-tool-precommit-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -265,7 +265,7 @@ test('/precommit pass sets precommit passed true', () => {
 });
 
 test('non-review tool does not write state', () => {
-  const workDir = makeTempDir('sd0x-post-tool-nonreview-');
+  const workDir = makeTempDir('jupiter-post-tool-nonreview-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -282,7 +282,7 @@ test('non-review tool does not write state', () => {
 });
 
 test('re-run flips code_review passed from false to true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-rerun-');
+  const workDir = makeTempDir('jupiter-post-tool-rerun-');
   const binDir = setupStubBin();
 
   runHook({
@@ -311,7 +311,7 @@ test('re-run flips code_review passed from false to true', () => {
 });
 
 test('/codex-review (without -fast) sets code_review', () => {
-  const workDir = makeTempDir('sd0x-post-tool-review-full-');
+  const workDir = makeTempDir('jupiter-post-tool-review-full-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -328,7 +328,7 @@ test('/codex-review (without -fast) sets code_review', () => {
 });
 
 test('/precommit-fast sets precommit passed', () => {
-  const workDir = makeTempDir('sd0x-post-tool-precommit-fast-');
+  const workDir = makeTempDir('jupiter-post-tool-precommit-fast-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -345,7 +345,7 @@ test('/precommit-fast sets precommit passed', () => {
 });
 
 test('/review-spec sets doc_review passed', () => {
-  const workDir = makeTempDir('sd0x-post-tool-review-spec-');
+  const workDir = makeTempDir('jupiter-post-tool-review-spec-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -366,7 +366,7 @@ test('/review-spec sets doc_review passed', () => {
 // =============================================================================
 
 test('MCP code review pass (\u2705 Ready) sets code_review passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-code-pass-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-code-pass-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -384,7 +384,7 @@ test('MCP code review pass (\u2705 Ready) sets code_review passed true', () => {
 });
 
 test('MCP doc review pass (\u2705 Mergeable) sets doc_review passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-doc-pass-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-doc-pass-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -402,7 +402,7 @@ test('MCP doc review pass (\u2705 Mergeable) sets doc_review passed true', () =>
 });
 
 test('MCP code review block (\u26d4 Blocked) sets code_review passed false', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-code-block-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-code-block-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -420,7 +420,7 @@ test('MCP code review block (\u26d4 Blocked) sets code_review passed false', () 
 });
 
 test('MCP doc review block (\u26d4 Needs revision) via codex-reply sets doc_review passed false', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-doc-block-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-doc-block-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -438,7 +438,7 @@ test('MCP doc review block (\u26d4 Needs revision) via codex-reply sets doc_revi
 });
 
 test('MCP \u2705 All Pass routes to code_review', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-allpass-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-allpass-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -456,7 +456,7 @@ test('MCP \u2705 All Pass routes to code_review', () => {
 });
 
 test('MCP ambiguous ## Gate: \u2705 alone does not create state', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-ambiguous-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-ambiguous-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -473,7 +473,7 @@ test('MCP ambiguous ## Gate: \u2705 alone does not create state', () => {
 });
 
 test('MCP content as array format sets code_review', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-array-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-array-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -491,7 +491,7 @@ test('MCP content as array format sets code_review', () => {
 });
 
 test('MCP security review \u2705 Mergeable: No P0 does NOT set doc_review', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-sec-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-sec-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -508,7 +508,7 @@ test('MCP security review \u2705 Mergeable: No P0 does NOT set doc_review', () =
 });
 
 test('MCP plain string tool_output does not crash hook', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-string-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-string-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -525,7 +525,7 @@ test('MCP plain string tool_output does not crash hook', () => {
 });
 
 test('MCP precommit FAIL sets precommit passed false', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-precommit-fail-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-precommit-fail-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -544,7 +544,7 @@ test('MCP precommit FAIL sets precommit passed false', () => {
 });
 
 test('MCP precommit PASS sets precommit passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-precommit-pass-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-precommit-pass-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -563,7 +563,7 @@ test('MCP precommit PASS sets precommit passed true', () => {
 });
 
 test('D1: security review with ✅ Mergeable but no ## Document Review does NOT set doc_review', () => {
-  const workDir = makeTempDir('sd0x-post-tool-d1-sec-collision-');
+  const workDir = makeTempDir('jupiter-post-tool-d1-sec-collision-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -580,7 +580,7 @@ test('D1: security review with ✅ Mergeable but no ## Document Review does NOT 
 });
 
 test('D1: doc review with ## Document Review + ✅ Mergeable sets doc_review', () => {
-  const workDir = makeTempDir('sd0x-post-tool-d1-doc-ok-');
+  const workDir = makeTempDir('jupiter-post-tool-d1-doc-ok-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -598,7 +598,7 @@ test('D1: doc review with ## Document Review + ✅ Mergeable sets doc_review', (
 });
 
 test('D1: security review with ⛔ Needs revision but no ## Document Review does NOT set doc_review', () => {
-  const workDir = makeTempDir('sd0x-post-tool-d1-sec-needs-rev-');
+  const workDir = makeTempDir('jupiter-post-tool-d1-sec-needs-rev-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -615,18 +615,18 @@ test('D1: security review with ⛔ Needs revision but no ## Document Review does
 });
 
 // =============================================================================
-// Qualified (namespaced) command tests — /sd0x-dev-flow:command
+// Qualified (namespaced) command tests — /jupiter-dev-flow:command
 // =============================================================================
 
-test('/sd0x-dev-flow:codex-review-fast pass sets code_review passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-qual-code-');
+test('/jupiter-dev-flow:codex-review-fast pass sets code_review passed true', () => {
+  const workDir = makeTempDir('jupiter-post-tool-qual-code-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
     binDir,
     input: {
       tool_name: 'Bash',
-      tool_input: { command: '/sd0x-dev-flow:codex-review-fast' },
+      tool_input: { command: '/jupiter-dev-flow:codex-review-fast' },
       tool_output: '## Gate: \u2705',
     },
   });
@@ -635,15 +635,15 @@ test('/sd0x-dev-flow:codex-review-fast pass sets code_review passed true', () =>
   assert.equal(state.code_review.passed, true, 'qualified codex-review-fast should set code_review');
 });
 
-test('/sd0x-dev-flow:codex-review-doc pass sets doc_review passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-qual-doc-');
+test('/jupiter-dev-flow:codex-review-doc pass sets doc_review passed true', () => {
+  const workDir = makeTempDir('jupiter-post-tool-qual-doc-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
     binDir,
     input: {
       tool_name: 'Bash',
-      tool_input: { command: '/sd0x-dev-flow:codex-review-doc' },
+      tool_input: { command: '/jupiter-dev-flow:codex-review-doc' },
       tool_output: '\u2705 All Pass',
     },
   });
@@ -652,15 +652,15 @@ test('/sd0x-dev-flow:codex-review-doc pass sets doc_review passed true', () => {
   assert.equal(state.doc_review.passed, true, 'qualified codex-review-doc should set doc_review');
 });
 
-test('/sd0x-dev-flow:precommit pass sets precommit passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-qual-pre-');
+test('/jupiter-dev-flow:precommit pass sets precommit passed true', () => {
+  const workDir = makeTempDir('jupiter-post-tool-qual-pre-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
     binDir,
     input: {
       tool_name: 'Bash',
-      tool_input: { command: '/sd0x-dev-flow:precommit' },
+      tool_input: { command: '/jupiter-dev-flow:precommit' },
       tool_output: '## Overall: \u2705 PASS',
     },
   });
@@ -669,15 +669,15 @@ test('/sd0x-dev-flow:precommit pass sets precommit passed true', () => {
   assert.equal(state.precommit.passed, true, 'qualified precommit should set precommit');
 });
 
-test('/sd0x-dev-flow:review-spec pass sets doc_review passed true', () => {
-  const workDir = makeTempDir('sd0x-post-tool-qual-review-spec-');
+test('/jupiter-dev-flow:review-spec pass sets doc_review passed true', () => {
+  const workDir = makeTempDir('jupiter-post-tool-qual-review-spec-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
     binDir,
     input: {
       tool_name: 'Bash',
-      tool_input: { command: '/sd0x-dev-flow:review-spec' },
+      tool_input: { command: '/jupiter-dev-flow:review-spec' },
       tool_output: '\u2705 All Pass',
     },
   });
@@ -687,7 +687,7 @@ test('/sd0x-dev-flow:review-spec pass sets doc_review passed true', () => {
 });
 
 test('MCP doc review mentioning OWASP still sets doc_review (regression)', () => {
-  const workDir = makeTempDir('sd0x-post-tool-mcp-doc-owasp-');
+  const workDir = makeTempDir('jupiter-post-tool-mcp-doc-owasp-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,

@@ -1,4 +1,4 @@
-# sd0x-dev-flow
+# jupiter-dev-flow
 
 **Idioma**: [English](README.md) | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | Español
 
@@ -35,10 +35,10 @@ Por qué es importante:
 
 ```bash
 # Agregar marketplace
-/plugin marketplace add sd0xdev/sd0x-dev-flow
+/plugin marketplace add jupiter-Pulin/plugin-repo
 
 # Instalar plugin
-/plugin install sd0x-dev-flow@sd0xdev-marketplace
+/plugin install jupiter-dev-flow@jupiter-marketplace
 ```
 
 ## Inicio rápido

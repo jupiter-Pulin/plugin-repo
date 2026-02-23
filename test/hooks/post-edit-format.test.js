@@ -28,7 +28,7 @@ function writeExecutable(filePath, content) {
 }
 
 function setupStubBin() {
-  const binDir = makeTempDir('sd0x-post-edit-format-bin-');
+  const binDir = makeTempDir('jupiter-post-edit-format-bin-');
 
   // Stub jq that handles:
   // 1. -r '.tool_input.file_path // empty' (from stdin)
@@ -124,7 +124,7 @@ after(() => {
 // =============================================================================
 
 test('empty file_path exits 0 with no state', () => {
-  const workDir = makeTempDir('sd0x-format-empty-');
+  const workDir = makeTempDir('jupiter-format-empty-');
   const binDir = setupStubBin();
   const result = runHook({ cwd: workDir, binDir, filePath: '' });
   assert.equal(result.status, 0);
@@ -132,7 +132,7 @@ test('empty file_path exits 0 with no state', () => {
 });
 
 test('suspicious path exits 0 with warning', () => {
-  const workDir = makeTempDir('sd0x-format-suspicious-');
+  const workDir = makeTempDir('jupiter-format-suspicious-');
   const binDir = setupStubBin();
   const result = runHook({ cwd: workDir, binDir, filePath: '/path/file;rm -rf /' });
   assert.equal(result.status, 0);
@@ -145,7 +145,7 @@ test('suspicious path exits 0 with warning', () => {
 // =============================================================================
 
 test('.ts file sets has_code_change in state', () => {
-  const workDir = makeTempDir('sd0x-format-ts-');
+  const workDir = makeTempDir('jupiter-format-ts-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -160,7 +160,7 @@ test('.ts file sets has_code_change in state', () => {
 });
 
 test('.tsx file sets has_code_change in state', () => {
-  const workDir = makeTempDir('sd0x-format-tsx-');
+  const workDir = makeTempDir('jupiter-format-tsx-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -175,7 +175,7 @@ test('.tsx file sets has_code_change in state', () => {
 });
 
 test('.js file sets has_code_change in state', () => {
-  const workDir = makeTempDir('sd0x-format-js-');
+  const workDir = makeTempDir('jupiter-format-js-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -194,7 +194,7 @@ test('.js file sets has_code_change in state', () => {
 // =============================================================================
 
 test('.md file sets has_doc_change in state', () => {
-  const workDir = makeTempDir('sd0x-format-md-');
+  const workDir = makeTempDir('jupiter-format-md-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -209,7 +209,7 @@ test('.md file sets has_doc_change in state', () => {
 });
 
 test('.mdx file sets has_doc_change in state', () => {
-  const workDir = makeTempDir('sd0x-format-mdx-');
+  const workDir = makeTempDir('jupiter-format-mdx-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -228,7 +228,7 @@ test('.mdx file sets has_doc_change in state', () => {
 // =============================================================================
 
 test('.json file does not update state', () => {
-  const workDir = makeTempDir('sd0x-format-json-');
+  const workDir = makeTempDir('jupiter-format-json-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -241,7 +241,7 @@ test('.json file does not update state', () => {
 });
 
 test('.py file tracks as code change', () => {
-  const workDir = makeTempDir('sd0x-format-py-');
+  const workDir = makeTempDir('jupiter-format-py-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -259,7 +259,7 @@ test('.py file tracks as code change', () => {
 // =============================================================================
 
 test('vendor path (node_modules) skips all tracking', () => {
-  const workDir = makeTempDir('sd0x-format-vendor-');
+  const workDir = makeTempDir('jupiter-format-vendor-');
   // Use realpathSync to match Bash $PWD (macOS: /var -> /private/var)
   const physDir = realpathSync(workDir);
   const binDir = setupStubBin();
@@ -273,7 +273,7 @@ test('vendor path (node_modules) skips all tracking', () => {
 });
 
 test('src/build/ is NOT treated as vendor (no false positive)', () => {
-  const workDir = makeTempDir('sd0x-format-srcbuild-');
+  const workDir = makeTempDir('jupiter-format-srcbuild-');
   const physDir = realpathSync(workDir);
   const binDir = setupStubBin();
   const result = runHook({
@@ -293,7 +293,7 @@ test('src/build/ is NOT treated as vendor (no false positive)', () => {
 // =============================================================================
 
 test('.ts file logs code change to stderr', () => {
-  const workDir = makeTempDir('sd0x-format-ts-log-');
+  const workDir = makeTempDir('jupiter-format-ts-log-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -305,7 +305,7 @@ test('.ts file logs code change to stderr', () => {
 });
 
 test('.md file logs doc change to stderr', () => {
-  const workDir = makeTempDir('sd0x-format-md-log-');
+  const workDir = makeTempDir('jupiter-format-md-log-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -321,7 +321,7 @@ test('.md file logs doc change to stderr', () => {
 // =============================================================================
 
 test('HOOK_NO_FORMAT=1 still tracks code changes', () => {
-  const workDir = makeTempDir('sd0x-format-noformat-');
+  const workDir = makeTempDir('jupiter-format-noformat-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -340,7 +340,7 @@ test('HOOK_NO_FORMAT=1 still tracks code changes', () => {
 // =============================================================================
 
 test('state file initializes with correct structure', () => {
-  const workDir = makeTempDir('sd0x-format-init-');
+  const workDir = makeTempDir('jupiter-format-init-');
   const binDir = setupStubBin();
   runHook({
     cwd: workDir,
@@ -365,7 +365,7 @@ test('state file initializes with correct structure', () => {
 // =============================================================================
 
 test('code edit invalidates code_review.passed', () => {
-  const workDir = makeTempDir('sd0x-format-invalidate-code-');
+  const workDir = makeTempDir('jupiter-format-invalidate-code-');
   const binDir = setupStubBin();
   // Pre-seed state with passed code_review
   writeFileSync(
@@ -392,7 +392,7 @@ test('code edit invalidates code_review.passed', () => {
 });
 
 test('code edit invalidates precommit.passed', () => {
-  const workDir = makeTempDir('sd0x-format-invalidate-precommit-');
+  const workDir = makeTempDir('jupiter-format-invalidate-precommit-');
   const binDir = setupStubBin();
   // Pre-seed state with passed precommit
   writeFileSync(
@@ -418,7 +418,7 @@ test('code edit invalidates precommit.passed', () => {
 });
 
 test('doc edit invalidates doc_review.passed', () => {
-  const workDir = makeTempDir('sd0x-format-invalidate-doc-');
+  const workDir = makeTempDir('jupiter-format-invalidate-doc-');
   const binDir = setupStubBin();
   // Pre-seed state with passed doc_review
   writeFileSync(
@@ -445,7 +445,7 @@ test('doc edit invalidates doc_review.passed', () => {
 });
 
 test('doc edit does NOT invalidate code_review', () => {
-  const workDir = makeTempDir('sd0x-format-doc-no-code-invalidate-');
+  const workDir = makeTempDir('jupiter-format-doc-no-code-invalidate-');
   const binDir = setupStubBin();
   // Pre-seed state with passed code_review
   writeFileSync(

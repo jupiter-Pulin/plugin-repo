@@ -21,13 +21,13 @@ test('namespace-hint.sh output is under 100 chars', () => {
 
 test('namespace-hint.sh output contains plugin name', () => {
   const output = execFileSync('bash', [scriptPath], { encoding: 'utf8' }).trim();
-  assert.ok(output.includes('sd0x-dev-flow'), 'output should contain plugin name');
+  assert.ok(output.includes('jupiter-dev-flow'), 'output should contain plugin name');
 });
 
 test('namespace-hint.sh output contains namespace guidance', () => {
   const output = execFileSync('bash', [scriptPath], { encoding: 'utf8' }).trim();
   assert.ok(
-    output.includes('/sd0x-dev-flow:') || output.includes('sd0x-dev-flow:command'),
+    output.includes('/jupiter-dev-flow:') || output.includes('jupiter-dev-flow:command'),
     'output should contain namespace example'
   );
 });

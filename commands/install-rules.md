@@ -11,9 +11,9 @@ allowed-tools: Read, Glob, Write, Bash(mkdir:*), Bash(diff:*), Bash(git:*), Bash
 
 ## Task
 
-Install sd0x-dev-flow plugin rules into the current project's `.claude/rules/` directory so they persist even without the plugin loaded.
+Install jupiter-dev-flow plugin rules into the current project's `.claude/rules/` directory so they persist even without the plugin loaded.
 
-> **Note**: Installed rules are behavioral guidance for Claude. They reference commands in short form (`/codex-review-fast`). When the sd0x-dev-flow plugin is loaded, commands are auto-namespaced as `/sd0x-dev-flow:codex-review-fast`. For full command execution support without the plugin, also run `/install-hooks` to set up the hook scripts locally.
+> **Note**: Installed rules are behavioral guidance for Claude. They reference commands in short form (`/codex-review-fast`). When the jupiter-dev-flow plugin is loaded, commands are auto-namespaced as `/jupiter-dev-flow:codex-review-fast`. For full command execution support without the plugin, also run `/install-hooks` to set up the hook scripts locally.
 
 ### Workflow
 
@@ -56,8 +56,8 @@ Find the plugin's `rules/` directory using this priority:
 1. **Glob search** — search known Claude plugin locations in order, short-circuit on first match:
 
    ```
-   Glob: ~/.claude/plugins/**/sd0x-dev-flow/rules/auto-loop.md
-   Glob: ${REPO_ROOT}/node_modules/sd0x-dev-flow/rules/auto-loop.md
+   Glob: ~/.claude/plugins/**/jupiter-dev-flow/rules/auto-loop.md
+   Glob: ${REPO_ROOT}/node_modules/jupiter-dev-flow/rules/auto-loop.md
    ```
 
 2. **Plugin-relative fallback** — since this command is loaded from the plugin, try reading `@rules/auto-loop.md` to confirm the plugin's rules are accessible. If readable, derive the rules directory by resolving the path returned (parent of `auto-loop.md`).

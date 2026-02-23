@@ -8,7 +8,7 @@
 
 ## Background
 
-`/project-audit` 的 `robustness-lint-typecheck` check 偵測 Node `lint`/`typecheck`/`tsconfig` 啟發式 + Python/靜態型別語言捷徑，但不認識 markdown lint 工具。對以文件為主的專案（如 sd0x-dev-flow：~180 .md vs 23 .js）語義不對齊。Codex Brainstorm 對抗式討論達成 Nash Equilibrium：安裝 `markdownlint-cli2`（不加 devDep）+ 修改審計邏輯支援 docs-heavy profile。
+`/project-audit` 的 `robustness-lint-typecheck` check 偵測 Node `lint`/`typecheck`/`tsconfig` 啟發式 + Python/靜態型別語言捷徑，但不認識 markdown lint 工具。對以文件為主的專案（如 jupiter-dev-flow：~180 .md vs 23 .js）語義不對齊。Codex Brainstorm 對抗式討論達成 Nash Equilibrium：安裝 `markdownlint-cli2`（不加 devDep）+ 修改審計邏輯支援 docs-heavy profile。
 
 ## Requirements
 
@@ -82,7 +82,7 @@ isDocsHeavy = doc_ratio >= 0.6 && docs >= 30
 - [x] docs-heavy + 僅一個 signal → `partial`
 - [x] 非 docs-heavy 專案維持現有邏輯不變
 - [x] 零依賴狀態不變（`stability-lock-audit` 和 `runnability-env-docker` 仍為 `n/a`）
-- [x] sd0x-dev-flow 自身審計分數 >= 90（83 → 90）
+- [x] jupiter-dev-flow 自身審計分數 >= 90（83 → 90）
 - [x] 現有 37 test cases 全部通過（無 regression，全套 232 pass）
 - [x] 新增測試覆蓋 docs-heavy profile 場景（5 new tests: 38-42）
 - [x] Pass `/codex-review-fast`（3 rounds, ✅ Ready）

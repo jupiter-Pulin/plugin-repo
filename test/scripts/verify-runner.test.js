@@ -15,7 +15,7 @@ const runnerPath = resolve(__dirname, '../../scripts/verify-runner.js');
 const tempDirs = [];
 
 function createTempRepo(pkgJson, lockfile) {
-  const dir = mkdtempSync(join(tmpdir(), 'sd0x-verify-'));
+  const dir = mkdtempSync(join(tmpdir(), 'jupiter-verify-'));
   tempDirs.push(dir);
   execSync('git init', { cwd: dir, stdio: 'ignore' });
   execSync(
@@ -36,7 +36,7 @@ function writeScript(dir, name, exitCode) {
 }
 
 function runVerify(dir, args) {
-  const cacheDir = mkdtempSync(join(tmpdir(), 'sd0x-verify-cache-'));
+  const cacheDir = mkdtempSync(join(tmpdir(), 'jupiter-verify-cache-'));
   tempDirs.push(cacheDir);
   const env = {
     ...process.env,

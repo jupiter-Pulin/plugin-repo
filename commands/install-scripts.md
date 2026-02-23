@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Write, Bash(mkdir:*), Bash(diff:*), Bash(git:*), Bash
 
 ## Task
 
-Install sd0x-dev-flow plugin runner scripts into the current project's `.claude/scripts/` directory so they persist even without the plugin loaded. These scripts are used by `/precommit`, `/precommit-fast`, `/verify`, and `/dep-audit`.
+Install jupiter-dev-flow plugin runner scripts into the current project's `.claude/scripts/` directory so they persist even without the plugin loaded. These scripts are used by `/precommit`, `/precommit-fast`, `/verify`, and `/dep-audit`.
 
 ### Workflow
 
@@ -53,8 +53,8 @@ Find the plugin's `scripts/` directory using this priority (short-circuit on fir
 1. **Glob search** — search known Claude plugin locations:
 
    ```
-   Glob: ~/.claude/plugins/**/sd0x-dev-flow/scripts/precommit-runner.js
-   Glob: ${REPO_ROOT}/node_modules/sd0x-dev-flow/scripts/precommit-runner.js
+   Glob: ~/.claude/plugins/**/jupiter-dev-flow/scripts/precommit-runner.js
+   Glob: ${REPO_ROOT}/node_modules/jupiter-dev-flow/scripts/precommit-runner.js
    ```
 
 2. **Plugin-relative fallback** — try reading `@scripts/precommit-runner.js` to confirm accessibility. If readable, derive the scripts directory from the resolved path.

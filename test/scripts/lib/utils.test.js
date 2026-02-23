@@ -75,25 +75,25 @@ test('pmCommand', () => {
 });
 
 test('detectPackageManager', () => {
-  const pnpmDir = makeTempDir('sd0x-pnpm-');
+  const pnpmDir = makeTempDir('jupiter-pnpm-');
   writeFileSync(join(pnpmDir, 'pnpm-lock.yaml'), '');
   assert.equal(detectPackageManager(pnpmDir), 'pnpm');
 
-  const yarnDir = makeTempDir('sd0x-yarn-');
+  const yarnDir = makeTempDir('jupiter-yarn-');
   writeFileSync(join(yarnDir, 'yarn.lock'), '');
   assert.equal(detectPackageManager(yarnDir), 'yarn');
 
-  const npmDir = makeTempDir('sd0x-npm-');
+  const npmDir = makeTempDir('jupiter-npm-');
   assert.equal(detectPackageManager(npmDir), 'npm');
 
-  const bothDir = makeTempDir('sd0x-both-');
+  const bothDir = makeTempDir('jupiter-both-');
   writeFileSync(join(bothDir, 'yarn.lock'), '');
   writeFileSync(join(bothDir, 'pnpm-lock.yaml'), '');
   assert.equal(detectPackageManager(bothDir), 'pnpm');
 });
 
 test('tailLinesFromFile', () => {
-  const dir = makeTempDir('sd0x-tail-');
+  const dir = makeTempDir('jupiter-tail-');
   const filePath = join(dir, 'sample.txt');
   writeFileSync(filePath, 'line1\nline2\nline3\nline4');
 
@@ -233,20 +233,20 @@ test('runCapture captures stderr', async () => {
 // =============================================================================
 
 test('readPackageJson with valid file', () => {
-  const dir = makeTempDir('sd0x-pkg-');
+  const dir = makeTempDir('jupiter-pkg-');
   writeFileSync(join(dir, 'package.json'), '{"name":"test","version":"1.0.0"}');
   const pkg = readPackageJson(dir);
   assert.deepEqual(pkg, { name: 'test', version: '1.0.0' });
 });
 
 test('readPackageJson with missing file', () => {
-  const dir = makeTempDir('sd0x-pkg-missing-');
+  const dir = makeTempDir('jupiter-pkg-missing-');
   const pkg = readPackageJson(dir);
   assert.equal(pkg, null);
 });
 
 test('readPackageJson with invalid JSON', () => {
-  const dir = makeTempDir('sd0x-pkg-invalid-');
+  const dir = makeTempDir('jupiter-pkg-invalid-');
   writeFileSync(join(dir, 'package.json'), '{invalid json}');
   const pkg = readPackageJson(dir);
   assert.equal(pkg, null);
@@ -257,21 +257,21 @@ test('readPackageJson with invalid JSON', () => {
 // =============================================================================
 
 test('ensureDir creates nested directories', () => {
-  const dir = makeTempDir('sd0x-ensure-');
+  const dir = makeTempDir('jupiter-ensure-');
   const nested = join(dir, 'a', 'b', 'c');
   ensureDir(nested);
   assert.ok(existsSync(nested));
 });
 
 test('writeText creates file with content', () => {
-  const dir = makeTempDir('sd0x-write-');
+  const dir = makeTempDir('jupiter-write-');
   const filePath = join(dir, 'sub', 'test.txt');
   writeText(filePath, 'hello world');
   assert.equal(readFileSync(filePath, 'utf8'), 'hello world');
 });
 
 test('appendLog appends to file', () => {
-  const dir = makeTempDir('sd0x-append-');
+  const dir = makeTempDir('jupiter-append-');
   const filePath = join(dir, 'log.txt');
   appendLog(filePath, 'line1\n');
   appendLog(filePath, 'line2\n');
@@ -282,21 +282,21 @@ test('appendLog appends to file', () => {
 // getPluginName / qualifyCommand
 // =============================================================================
 
-test('getPluginName returns sd0x-dev-flow from plugin.json', () => {
+test('getPluginName returns jupiter-dev-flow from plugin.json', () => {
   const name = getPluginName();
-  assert.equal(name, 'sd0x-dev-flow');
+  assert.equal(name, 'jupiter-dev-flow');
 });
 
 test('qualifyCommand prefixes short-form commands', () => {
-  assert.equal(qualifyCommand('/codex-review-fast'), '/sd0x-dev-flow:codex-review-fast');
-  assert.equal(qualifyCommand('/precommit'), '/sd0x-dev-flow:precommit');
-  assert.equal(qualifyCommand('/update-docs'), '/sd0x-dev-flow:update-docs');
+  assert.equal(qualifyCommand('/codex-review-fast'), '/jupiter-dev-flow:codex-review-fast');
+  assert.equal(qualifyCommand('/precommit'), '/jupiter-dev-flow:precommit');
+  assert.equal(qualifyCommand('/update-docs'), '/jupiter-dev-flow:update-docs');
 });
 
 test('qualifyCommand returns already-qualified commands unchanged', () => {
   assert.equal(
-    qualifyCommand('/sd0x-dev-flow:codex-review-fast'),
-    '/sd0x-dev-flow:codex-review-fast'
+    qualifyCommand('/jupiter-dev-flow:codex-review-fast'),
+    '/jupiter-dev-flow:codex-review-fast'
   );
 });
 

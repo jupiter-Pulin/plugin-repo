@@ -1,4 +1,4 @@
-# sd0x-dev-flow
+# jupiter-dev-flow
 
 **Language**: English | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md)
 
@@ -35,10 +35,10 @@ Why this matters:
 
 ```bash
 # Add marketplace
-/plugin marketplace add sd0xdev/sd0x-dev-flow
+/plugin marketplace add jupiter-Pulin/plugin-repo
 
 # Install plugin
-/plugin install sd0x-dev-flow@sd0xdev-marketplace
+/plugin install jupiter-dev-flow@jupiter-marketplace
 ```
 
 ## Quick Start
@@ -337,4 +337,4 @@ MIT
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=sd0xdev/sd0x-dev-flow&type=date&legend=top-left)](https://www.star-history.com/#sd0xdev/sd0x-dev-flow&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=jupiter-Pulin/plugin-repo&type=date&legend=top-left)](https://www.star-history.com/#jupiter-Pulin/plugin-repo&type=date&legend=top-left)

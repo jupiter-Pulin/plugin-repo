@@ -1,4 +1,4 @@
-# sd0x-dev-flow
+# jupiter-dev-flow
 
 **言語**: [English](README.md) | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md) | 日本語 | [한국어](README.ko.md) | [Español](README.es.md)
 
@@ -35,10 +35,10 @@
 
 ```bash
 # marketplace を追加
-/plugin marketplace add sd0xdev/sd0x-dev-flow
+/plugin marketplace add jupiter-Pulin/plugin-repo
 
 # プラグインをインストール
-/plugin install sd0x-dev-flow@sd0xdev-marketplace
+/plugin install jupiter-dev-flow@jupiter-marketplace
 ```
 
 ## クイックスタート

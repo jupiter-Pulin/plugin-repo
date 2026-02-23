@@ -56,7 +56,7 @@
 - [x] `robustness-lint-typecheck`：邏輯不變，確認現有測試仍通過
 - [x] 現有 26 test cases 全部通過（無 regression）
 - [x] 新增測試覆蓋：工具型/插件型專案場景（零依賴、無 src/、純 JS）
-- [x] sd0x-dev-flow 自身審計分數 >= 70（現為 53）— 實際達成 83/100
+- [x] jupiter-dev-flow 自身審計分數 >= 70（現為 53）— 實際達成 83/100
 - [x] Pass `/codex-review-fast` — 3 rounds, ✅ Ready
 - [x] Pass `/precommit` — ✅ PASS (test:unit 23/23)
 

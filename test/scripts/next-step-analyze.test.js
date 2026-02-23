@@ -14,7 +14,7 @@ const scriptPath = resolve(__dirname, '../../skills/next-step/scripts/analyze.js
 const tempDirs = [];
 
 function createTempRepo() {
-  const dir = mkdtempSync(join(tmpdir(), 'sd0x-ns-'));
+  const dir = mkdtempSync(join(tmpdir(), 'jupiter-ns-'));
   tempDirs.push(dir);
   execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
   execFileSync(

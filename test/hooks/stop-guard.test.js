@@ -25,7 +25,7 @@ function writeExecutable(filePath, content) {
 }
 
 function setupStubBin() {
-  const binDir = makeTempDir('sd0x-stop-guard-bin-');
+  const binDir = makeTempDir('jupiter-stop-guard-bin-');
   const stubJq = `#!/usr/bin/env node
 const fs = require('fs');
 const args = process.argv.slice(2);
@@ -197,7 +197,7 @@ after(() => {
 });
 
 test('HOOK_BYPASS=1 allows stop', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-');
+  const workDir = makeTempDir('jupiter-stop-guard-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -211,7 +211,7 @@ test('HOOK_BYPASS=1 allows stop', () => {
 });
 
 test('missing transcript allows stop', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-missing-');
+  const workDir = makeTempDir('jupiter-stop-guard-missing-');
   const binDir = setupStubBin();
   const result = runHook({
     cwd: workDir,
@@ -224,7 +224,7 @@ test('missing transcript allows stop', () => {
 });
 
 test('state file strict: code change review not passed blocks', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-state-code-');
+  const workDir = makeTempDir('jupiter-stop-guard-state-code-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.json');
   writeFileSync(transcriptPath, '[]');
@@ -250,7 +250,7 @@ test('state file strict: code change review not passed blocks', () => {
 });
 
 test('state file strict: doc change review not passed blocks', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-state-doc-');
+  const workDir = makeTempDir('jupiter-stop-guard-state-doc-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.json');
   writeFileSync(transcriptPath, '[]');
@@ -274,7 +274,7 @@ test('state file strict: doc change review not passed blocks', () => {
 });
 
 test('state file mode: all passed allows stop', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-state-pass-');
+  const workDir = makeTempDir('jupiter-stop-guard-state-pass-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.json');
   writeFileSync(transcriptPath, '[]');
@@ -297,7 +297,7 @@ test('state file mode: all passed allows stop', () => {
 });
 
 test('state file warn: code change review not passed allows stop', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-state-warn-');
+  const workDir = makeTempDir('jupiter-stop-guard-state-warn-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.json');
   writeFileSync(transcriptPath, '[]');
@@ -320,7 +320,7 @@ test('state file warn: code change review not passed allows stop', () => {
 });
 
 test('transcript strict: edit without review blocks', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-transcript-');
+  const workDir = makeTempDir('jupiter-stop-guard-transcript-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = '{"tool_name":"Edit","tool_input":{"path":"src/app.ts"}}\n';
@@ -337,7 +337,7 @@ test('transcript strict: edit without review blocks', () => {
 });
 
 test('transcript mode: blocked then pass allows stop', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-transcript-pass-');
+  const workDir = makeTempDir('jupiter-stop-guard-transcript-pass-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -360,7 +360,7 @@ test('transcript mode: blocked then pass allows stop', () => {
 });
 
 test('transcript strict: review blocked without subsequent pass blocks', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-blocked-strict-');
+  const workDir = makeTempDir('jupiter-stop-guard-blocked-strict-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -384,7 +384,7 @@ test('transcript strict: review blocked without subsequent pass blocks', () => {
 });
 
 test('transcript warn: review blocked without subsequent pass allows', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-blocked-warn-');
+  const workDir = makeTempDir('jupiter-stop-guard-blocked-warn-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -406,18 +406,18 @@ test('transcript warn: review blocked without subsequent pass allows', () => {
 });
 
 // =============================================================================
-// Qualified (namespaced) command tests — /sd0x-dev-flow:command in transcript
+// Qualified (namespaced) command tests — /jupiter-dev-flow:command in transcript
 // =============================================================================
 
-test('transcript: qualified /sd0x-dev-flow:codex-review-fast detected', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-qual-review-');
+test('transcript: qualified /jupiter-dev-flow:codex-review-fast detected', () => {
+  const workDir = makeTempDir('jupiter-stop-guard-qual-review-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
     '{"tool_name":"Edit","tool_input":{"path":"src/app.ts"}}',
-    'user: /sd0x-dev-flow:codex-review-fast',
+    'user: /jupiter-dev-flow:codex-review-fast',
     '## Gate: \u2705',
-    'user: /sd0x-dev-flow:precommit',
+    'user: /jupiter-dev-flow:precommit',
     '## Overall: \u2705 PASS',
   ].join('\n');
   writeFileSync(transcriptPath, transcript);
@@ -432,13 +432,13 @@ test('transcript: qualified /sd0x-dev-flow:codex-review-fast detected', () => {
   assert.equal(payload.ok, true);
 });
 
-test('transcript: qualified /sd0x-dev-flow:codex-review-doc detected for doc change', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-qual-doc-');
+test('transcript: qualified /jupiter-dev-flow:codex-review-doc detected for doc change', () => {
+  const workDir = makeTempDir('jupiter-stop-guard-qual-doc-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
     '{"tool_name":"Edit","tool_input":{"path":"docs/guide.md"}}',
-    'user: /sd0x-dev-flow:codex-review-doc',
+    'user: /jupiter-dev-flow:codex-review-doc',
     '\u2705 Mergeable',
   ].join('\n');
   writeFileSync(transcriptPath, transcript);
@@ -453,15 +453,15 @@ test('transcript: qualified /sd0x-dev-flow:codex-review-doc detected for doc cha
   assert.equal(payload.ok, true);
 });
 
-test('transcript: qualified /sd0x-dev-flow:precommit FAIL blocks', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-qual-pre-fail-');
+test('transcript: qualified /jupiter-dev-flow:precommit FAIL blocks', () => {
+  const workDir = makeTempDir('jupiter-stop-guard-qual-pre-fail-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
     '{"tool_name":"Edit","tool_input":{"path":"src/app.ts"}}',
-    'user: /sd0x-dev-flow:codex-review-fast',
+    'user: /jupiter-dev-flow:codex-review-fast',
     '## Gate: \u2705',
-    'user: /sd0x-dev-flow:precommit',
+    'user: /jupiter-dev-flow:precommit',
     '## Overall: \u26d4 FAIL',
   ].join('\n');
   writeFileSync(transcriptPath, transcript);
@@ -482,7 +482,7 @@ test('transcript: qualified /sd0x-dev-flow:precommit FAIL blocks', () => {
 // =============================================================================
 
 test('transcript: code change with only /codex-review-doc still requires code review', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-doc-review-code-');
+  const workDir = makeTempDir('jupiter-stop-guard-doc-review-code-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -510,7 +510,7 @@ test('transcript: code change with only /codex-review-doc still requires code re
 // =============================================================================
 
 test('review sentinel: ⛔ Needs revision then ✅ Mergeable allows (last wins)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-rev-fail-pass-');
+  const workDir = makeTempDir('jupiter-stop-guard-rev-fail-pass-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -535,7 +535,7 @@ test('review sentinel: ⛔ Needs revision then ✅ Mergeable allows (last wins)'
 });
 
 test('review sentinel: ✅ Ready then ⛔ Block blocks (last wins)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-rev-pass-fail-');
+  const workDir = makeTempDir('jupiter-stop-guard-rev-pass-fail-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -565,7 +565,7 @@ test('review sentinel: ✅ Ready then ⛔ Block blocks (last wins)', () => {
 // =============================================================================
 
 test('D2: transcript precommit FAIL blocks stop', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-d2-fail-');
+  const workDir = makeTempDir('jupiter-stop-guard-d2-fail-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -589,7 +589,7 @@ test('D2: transcript precommit FAIL blocks stop', () => {
 });
 
 test('D2: transcript precommit PASS does not block', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-d2-pass-');
+  const workDir = makeTempDir('jupiter-stop-guard-d2-pass-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -616,7 +616,7 @@ test('D2: transcript precommit PASS does not block', () => {
 // =============================================================================
 
 test('N2: transcript ⛔ Must fix detected as blocked', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-n2-must-fix-');
+  const workDir = makeTempDir('jupiter-stop-guard-n2-must-fix-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -644,7 +644,7 @@ test('N2: transcript ⛔ Must fix detected as blocked', () => {
 // =============================================================================
 
 test('D2: transcript precommit PASS then FAIL blocks (last result wins)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-d2-pass-fail-');
+  const workDir = makeTempDir('jupiter-stop-guard-d2-pass-fail-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -670,7 +670,7 @@ test('D2: transcript precommit PASS then FAIL blocks (last result wins)', () => 
 });
 
 test('D2: transcript precommit FAIL then PASS then FAIL blocks (last wins)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-d2-fpf-');
+  const workDir = makeTempDir('jupiter-stop-guard-d2-fpf-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = [
@@ -702,7 +702,7 @@ test('D2: transcript precommit FAIL then PASS then FAIL blocks (last wins)', () 
 // =============================================================================
 
 test('N3: transcript .mdx edit detected as doc change', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-n3-mdx-');
+  const workDir = makeTempDir('jupiter-stop-guard-n3-mdx-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   const transcript = '{"tool_name":"Edit","tool_input":{"path":"docs/guide.mdx"}}\n';
@@ -720,7 +720,7 @@ test('N3: transcript .mdx edit detected as doc change', () => {
 });
 
 test('N2: transcript ⛔ Needs revision detected as blocked', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-n2-needs-rev-');
+  const workDir = makeTempDir('jupiter-stop-guard-n2-needs-rev-');
   const binDir = setupStubBin();
   const transcriptPath = join(workDir, 'transcript.txt');
   // Include /precommit + PASS so MISSING path doesn't fire, isolating the BLOCKED_REASON path
@@ -759,7 +759,7 @@ exit 1
 }
 
 test('clean worktree overrides stale has_code_change (allows stop)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-stale-code-');
+  const workDir = makeTempDir('jupiter-stop-guard-stale-code-');
   const binDir = setupStubBin();
   // Stub git returns empty porcelain (clean worktree)
   setupStubGit(binDir, '');
@@ -786,7 +786,7 @@ test('clean worktree overrides stale has_code_change (allows stop)', () => {
 });
 
 test('clean worktree overrides stale has_doc_change (allows stop)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-stale-doc-');
+  const workDir = makeTempDir('jupiter-stop-guard-stale-doc-');
   const binDir = setupStubBin();
   // Stub git returns empty porcelain (clean worktree)
   setupStubGit(binDir, '');
@@ -812,7 +812,7 @@ test('clean worktree overrides stale has_doc_change (allows stop)', () => {
 });
 
 test('renamed code file in porcelain is still detected', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-rename-');
+  const workDir = makeTempDir('jupiter-stop-guard-rename-');
   const binDir = setupStubBin();
   // Git porcelain rename entry: old.ts -> new.txt
   setupStubGit(binDir, 'R  src/old.ts -> src/new.txt');
@@ -840,7 +840,7 @@ test('renamed code file in porcelain is still detected', () => {
 });
 
 test('quoted filenames in porcelain are still detected (B2 fix)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-quoted-');
+  const workDir = makeTempDir('jupiter-stop-guard-quoted-');
   const binDir = setupStubBin();
   // Git porcelain output with quoted filename (spaces/unicode)
   setupStubGit(binDir, ' M "src/my file.ts"');
@@ -868,7 +868,7 @@ test('quoted filenames in porcelain are still detected (B2 fix)', () => {
 });
 
 test('A3: git timeout fails open (trusts state file)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-a3-timeout-');
+  const workDir = makeTempDir('jupiter-stop-guard-a3-timeout-');
   const binDir = setupStubBin();
   // Stub git that sleeps longer than the 5s timeout — simulate via immediate failure
   // (actual timeout testing requires real sleep; we test the fallback path by making
@@ -900,7 +900,7 @@ test('A3: git timeout fails open (trusts state file)', () => {
 });
 
 test('git unavailable fails open (trusts state file)', () => {
-  const workDir = makeTempDir('sd0x-stop-guard-no-git-');
+  const workDir = makeTempDir('jupiter-stop-guard-no-git-');
   const binDir = setupStubBin();
   // Stub git that always fails (simulates git not available / not a repo)
   writeExecutable(join(binDir, 'git'), '#!/bin/sh\nexit 128\n');

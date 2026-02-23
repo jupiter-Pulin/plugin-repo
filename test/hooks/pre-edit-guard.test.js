@@ -28,7 +28,7 @@ function writeExecutable(filePath, content) {
 * Create a stub jq that extracts .tool_input.file_path from JSON input
  */
 function setupStubBin() {
-  const binDir = makeTempDir('sd0x-pre-edit-guard-bin-');
+  const binDir = makeTempDir('jupiter-pre-edit-guard-bin-');
   const stubJq = `#!/usr/bin/env node
 const fs = require('fs');
 const args = process.argv.slice(2);
@@ -56,7 +56,7 @@ process.stdout.write(filePath);
 * Create an empty bin directory (no jq) to test graceful degradation
  */
 function setupEmptyBin() {
-  return makeTempDir('sd0x-pre-edit-guard-empty-bin-');
+  return makeTempDir('jupiter-pre-edit-guard-empty-bin-');
 }
 
 function runHook({ binDir, filePath, env = {} }) {

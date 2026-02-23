@@ -7,7 +7,7 @@
 
 ## Background
 
-插件安裝到外部專案後，所有指令被命名空間化為 `/sd0x-dev-flow:command-name`，但插件內部文件（rules、skills、commands）全部使用短格式 `/command-name`。模型讀到「run `/codex-review-fast`」時會嘗試呼叫不存在的短格式指令，導致執行失敗。插件的 CLAUDE.md 不會被外部專案自動載入，無法靠它傳達命名空間規則。
+插件安裝到外部專案後，所有指令被命名空間化為 `/jupiter-dev-flow:command-name`，但插件內部文件（rules、skills、commands）全部使用短格式 `/command-name`。模型讀到「run `/codex-review-fast`」時會嘗試呼叫不存在的短格式指令，導致執行失敗。插件的 CLAUDE.md 不會被外部專案自動載入，無法靠它傳達命名空間規則。
 
 ## Requirements
 
@@ -15,12 +15,12 @@
 
 - 新增 `scripts/namespace-hint.sh` 腳本，輸出命名空間指導
 - 在 `hooks/hooks.json` 新增 `SessionStart` hook entry
-- 模型在 session 開始時接收指導：「所有 `/command` 引用應以 `/sd0x-dev-flow:command` 呼叫」
+- 模型在 session 開始時接收指導：「所有 `/command` 引用應以 `/jupiter-dev-flow:command` 呼叫」
 - Hook stdout 被注入為 Claude context
 
 ### 2. Hook Dual-Pattern Parsing
 
-- `hooks/post-tool-review-state.sh`：regex 接受可選 `sd0x-dev-flow:` 前綴
+- `hooks/post-tool-review-state.sh`：regex 接受可選 `jupiter-dev-flow:` 前綴
 - `hooks/stop-guard.sh`：同上
 - 確保不論模型用短格式或合格格式呼叫指令，狀態追蹤都能正確運作
 
@@ -76,9 +76,9 @@
 - [x] `scripts/namespace-hint.sh` 存在且可執行
 - [x] `hooks/hooks.json` 包含 SessionStart hook 使用 `${CLAUDE_PLUGIN_ROOT}/scripts/namespace-hint.sh`
 - [x] namespace-hint.sh 輸出簡潔的命名空間指導（<100 字元）
-- [x] `post-tool-review-state.sh` 可解析 `/sd0x-dev-flow:codex-review-fast` 格式
-- [x] `stop-guard.sh` 可解析 `/sd0x-dev-flow:precommit` 格式
-- [x] `analyze.js` 的 `next_actions[].command` 輸出 `/sd0x-dev-flow:command` 格式
+- [x] `post-tool-review-state.sh` 可解析 `/jupiter-dev-flow:codex-review-fast` 格式
+- [x] `stop-guard.sh` 可解析 `/jupiter-dev-flow:precommit` 格式
+- [x] `analyze.js` 的 `next_actions[].command` 輸出 `/jupiter-dev-flow:command` 格式
 - [x] `audit.js` 的 `next_actions[].command` 輸出合格格式
 - [x] `risk-analyze.js` 的 `next_actions[].command` 輸出合格格式
 - [x] `install-rules.md` 明確說明 rules 為行為指導、指令執行需插件載入

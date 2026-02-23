@@ -14,7 +14,7 @@ const scriptPath = resolve(__dirname, '../../skills/project-audit/scripts/audit.
 const tempDirs = [];
 
 function createTempRepo() {
-  const dir = mkdtempSync(join(tmpdir(), 'sd0x-audit-'));
+  const dir = mkdtempSync(join(tmpdir(), 'jupiter-audit-'));
   tempDirs.push(dir);
   execFileSync('git', ['init'], { cwd: dir, stdio: 'ignore' });
   execFileSync(
@@ -459,7 +459,7 @@ test('stability-lock-audit — pass when lock + audit script exist', () => {
 // Test 19: Invalid --dir exits 2
 // ---------------------------------------------------------------------------
 test('invalid --dir exits 2 with error', () => {
-  const badPath = join(tmpdir(), 'sd0x-nonexistent-dir-' + Date.now());
+  const badPath = join(tmpdir(), 'jupiter-nonexistent-dir-' + Date.now());
   const { exitCode } = runAudit(badPath);
   assert.equal(exitCode, 2);
 });
@@ -468,7 +468,7 @@ test('invalid --dir exits 2 with error', () => {
 // Test 20: Non-git repo without --dir exits 2
 // ---------------------------------------------------------------------------
 test('non-git repo without --dir exits 2', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'sd0x-audit-nogit-'));
+  const dir = mkdtempSync(join(tmpdir(), 'jupiter-audit-nogit-'));
   tempDirs.push(dir);
   try {
     execFileSync('node', [scriptPath, '--json'], {

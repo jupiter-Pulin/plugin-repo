@@ -1,4 +1,4 @@
-# sd0x-dev-flow
+# jupiter-dev-flow
 
 **语言**: [English](README.md) | [繁體中文](README.zh-TW.md) | 简体中文 | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md)
 
@@ -35,10 +35,10 @@
 
 ```bash
 # 添加 marketplace
-/plugin marketplace add sd0xdev/sd0x-dev-flow
+/plugin marketplace add jupiter-Pulin/plugin-repo
 
 # 安装插件
-/plugin install sd0x-dev-flow@sd0xdev-marketplace
+/plugin install jupiter-dev-flow@jupiter-marketplace
 ```
 
 ## 快速开始

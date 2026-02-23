@@ -15,7 +15,7 @@ const runnerPath = resolve(__dirname, '../../scripts/precommit-runner.js');
 const tempDirs = [];
 
 function createTempRepo(pkgJson, lockfile) {
-  const dir = mkdtempSync(join(tmpdir(), 'sd0x-test-'));
+  const dir = mkdtempSync(join(tmpdir(), 'jupiter-test-'));
   tempDirs.push(dir);
   execSync('git init', { cwd: dir, stdio: 'ignore' });
   execSync(
@@ -36,7 +36,7 @@ function writeScript(dir, name, exitCode) {
 }
 
 function runPrecommit(dir, mode) {
-  const cacheDir = mkdtempSync(join(tmpdir(), 'sd0x-cache-'));
+  const cacheDir = mkdtempSync(join(tmpdir(), 'jupiter-cache-'));
   tempDirs.push(cacheDir);
   const env = {
     ...process.env,

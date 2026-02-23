@@ -37,7 +37,7 @@ function linkSystemCommand(binDir, name) {
 
 function setupStubBin(options = {}) {
   const { includeJq = true, includeCoreUtils = false } = options;
-  const binDir = makeTempDir('sd0x-stub-bin-');
+  const binDir = makeTempDir('jupiter-stub-bin-');
   const stubAudit = `#!/bin/sh\nif [ \"$1\" = \"audit\" ]; then\n  if [ -n \"$STUB_AUDIT_JSON\" ]; then\n    cat \"$STUB_AUDIT_JSON\"\n  else\n    cat <<'JSON'\n{\"metadata\":{\"vulnerabilities\":{\"critical\":0,\"high\":0,\"moderate\":0,\"low\":0}}}\nJSON\n  fi\n  exit \${STUB_AUDIT_EXIT:-0}\nfi\nexit 0\n`;
   writeExecutable(join(binDir, 'npm'), stubAudit);
   writeExecutable(join(binDir, 'yarn'), stubAudit);
@@ -77,7 +77,7 @@ after(() => {
 });
 
 test('dep-audit fails when vulnerabilities meet default level', () => {
-  const workDir = makeTempDir('sd0x-audit-');
+  const workDir = makeTempDir('jupiter-audit-');
   const binDir = setupStubBin();
   const vulnJsonPath = join(workDir, 'vuln.json');
   writeFileSync(
@@ -93,7 +93,7 @@ test('dep-audit fails when vulnerabilities meet default level', () => {
 });
 
 test('dep-audit passes when audit is clean', () => {
-  const workDir = makeTempDir('sd0x-audit-clean-');
+  const workDir = makeTempDir('jupiter-audit-clean-');
   const binDir = setupStubBin();
   const cleanJsonPath = join(workDir, 'clean.json');
   writeFileSync(
@@ -109,7 +109,7 @@ test('dep-audit passes when audit is clean', () => {
 });
 
 test('dep-audit --help exits 0 and shows usage', () => {
-  const workDir = makeTempDir('sd0x-audit-help-');
+  const workDir = makeTempDir('jupiter-audit-help-');
   const binDir = setupStubBin();
 
   const result = runDepAudit(workDir, binDir, ['--help'], {});
@@ -118,7 +118,7 @@ test('dep-audit --help exits 0 and shows usage', () => {
 });
 
 test('dep-audit unknown arg exits 2', () => {
-  const workDir = makeTempDir('sd0x-audit-unknown-');
+  const workDir = makeTempDir('jupiter-audit-unknown-');
   const binDir = setupStubBin();
 
   const result = runDepAudit(workDir, binDir, ['--nope'], {});
@@ -126,7 +126,7 @@ test('dep-audit unknown arg exits 2', () => {
 });
 
 test('dep-audit --level high ignores moderate-only findings', () => {
-  const workDir = makeTempDir('sd0x-audit-high-');
+  const workDir = makeTempDir('jupiter-audit-high-');
   const binDir = setupStubBin();
   const vulnJsonPath = join(workDir, 'vuln.json');
   writeFileSync(
@@ -142,7 +142,7 @@ test('dep-audit --level high ignores moderate-only findings', () => {
 });
 
 test('dep-audit with failing jq defaults to zero counts', () => {
-  const workDir = makeTempDir('sd0x-audit-no-jq-');
+  const workDir = makeTempDir('jupiter-audit-no-jq-');
   const binDir = setupStubBin({ includeJq: false, includeCoreUtils: true });
   const vulnJsonPath = join(workDir, 'vuln.json');
   writeFileSync(
