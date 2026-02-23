@@ -1,0 +1,19 @@
+{
+  "name": "jupiter-marketplace",
+  "owner": {
+    "name": "jupiter-Pulin"
+  },
+  "metadata": {
+    "description": "Personal Claude Code development workflow plugin"
+  },
+  "plugins": [
+    {
+      "name": "jupiter-dev-flow",
+      "source": {
+        "source": "github",
+        "repo": "jupiter-Pulin/plugin-repo"
+      },
+      "description": "Development workflow plugin with 90+ tools for code review, testing, investigation, and DevOps automation"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "jupiter-dev-flow",
+  "version": "1.0.0",
+  "description": "Development workflow plugin with 90+ tools (forked from sd0x-dev-flow 1.0.25)",
+  "author": "jupiter-Pulin",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/**/*.test.js",
+    "test:unit": "node --test test/scripts/lib/*.test.js",
+    "test:integration": "node --test test/scripts/*.test.js",
+    "test:hooks": "node --test test/hooks/*.test.js",
+    "test:schema": "node --test test/commands/*.test.js",
+    "lint:md": "npx markdownlint-cli2 \"**/*.md\"",
+    "lint:fix": "npx markdownlint-cli2 --fix \"**/*.md\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "scripts/",
+    "commands/",
+    "skills/",
+    "agents/",
+    "hooks/",
+    "rules/",
+    "CLAUDE.md"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "jupiter-dev-flow",
+  "description": "Development workflow plugin with 90+ tools (forked from sd0x-dev-flow 1.0.25)",
+  "version": "1.0.0",
+  "author": { "name": "jupiter-Pulin" },
+  "license": "MIT",
+  "keywords": ["claude-code", "codex", "code-review", "devops", "workflow"]
+}
