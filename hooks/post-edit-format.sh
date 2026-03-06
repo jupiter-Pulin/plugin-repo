@@ -121,10 +121,29 @@ update_change_flag() {
 # Track code changes (all recognized code extensions)
 if echo "$file_path" | grep -Eq '\.(ts|tsx|js|jsx|mjs|cjs|py|pyw|go|rs|java|kt|kts|rb|php|swift|c|cpp|cc|h|hpp|cs|scala|ex|exs)$'; then
   update_change_flag "has_code_change"
-  invalidate_review "code_review"
-  invalidate_review "precommit"
-  echo "[Edit Hook] Code change detected: $file_path" >&2
-  echo "[Edit Hook] Invalidated code_review + precommit passed" >&2
+
+  # Smart invalidation: if code_review already passed and precommit was attempted
+  # but failed, this edit is likely a precommit fix → only invalidate precommit
+  skip_review_invalidation=false
+  if [[ -f "$STATE_FILE" ]]; then
+    cr_passed=$(jq -r '.code_review.passed // false' "$STATE_FILE" 2>/dev/null || echo "false")
+    pc_executed=$(jq -r '.precommit.executed // false' "$STATE_FILE" 2>/dev/null || echo "false")
+    pc_passed=$(jq -r '.precommit.passed // false' "$STATE_FILE" 2>/dev/null || echo "false")
+    if [[ "$cr_passed" == "true" && "$pc_executed" == "true" && "$pc_passed" == "false" ]]; then
+      skip_review_invalidation=true
+    fi
+  fi
+
+  if [[ "$skip_review_invalidation" == "true" ]]; then
+    invalidate_review "precommit"
+    echo "[Edit Hook] Precommit-fix edit detected: $file_path" >&2
+    echo "[Edit Hook] Only invalidated precommit (code_review preserved)" >&2
+  else
+    invalidate_review "code_review"
+    invalidate_review "precommit"
+    echo "[Edit Hook] Code change detected: $file_path" >&2
+    echo "[Edit Hook] Invalidated code_review + precommit passed" >&2
+  fi
 fi
 
 # Track doc changes (.md, .mdx)
