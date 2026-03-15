@@ -4,11 +4,11 @@
 
 Development workflow plugin for [Claude Code](https://claude.com/claude-code) with optional Codex MCP integration.
 
-90+ tools covering code review, testing, investigation, security audit, and DevOps automation.
+100+ tools covering code review, testing, investigation, security audit, DeFi on-chain analysis, and DevOps automation.
 
 ## Minimal Context Footprint
 
-This plugin occupies only **~4% of Claude's 200k context window** while delivering 90+ tools — a key architectural advantage.
+This plugin occupies only **~4% of Claude's 200k context window** while delivering 100+ tools — a key architectural advantage.
 
 | Component | Tokens | % of 200k |
 |-----------|--------|-----------|
@@ -55,12 +55,12 @@ This will detect your framework, package manager, database, entrypoints, and scr
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| Commands | 47 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
-| Skills | 31 | project-setup, code-explore, next-step, skill-health-check |
+| Commands | 50 | `/project-setup`, `/codex-review-fast`, `/verify`, `/defi-tx-decode` |
+| Skills | 34 | project-setup, code-explore, defi-onchain-balance, defi-tx-decode |
 | Agents | 14 | strict-reviewer, verify-app, coverage-analyst |
 | Hooks | 5 | pre-edit-guard, auto-format, review state tracking, stop guard, namespace hint |
 | Rules | 10 | auto-loop, codex-invocation, security, testing, git-workflow |
-| Scripts | 4 | precommit runner, verify runner, dep audit, namespace hint |
+| Scripts | 5 | precommit runner, verify runner, tx-decode runner, dep audit, namespace hint |
 
 ## Workflow
 
@@ -192,6 +192,8 @@ flowchart LR
 | `/feature-verify` | System diagnosis (read-only verification with dual-perspective) |
 | `/code-investigate` | Dual-perspective code investigation (Claude + Codex independent) |
 | `/next-step` | Context-aware next step advisor |
+| `/defi-onchain-balance` | Query ERC-20 token holder balances (top-N or range scan) |
+| `/defi-tx-decode` | Decode on-chain transaction with fund flow analysis |
 
 ### Review (Codex MCP)
 
@@ -211,7 +213,7 @@ flowchart LR
 
 | Command | Description |
 |---------|-------------|
-| `/verify` | lint -> typecheck -> unit -> integration -> e2e |
+| `/verify` | lint -> typecheck -> unit -> integration -> fork -> e2e |
 | `/precommit` | lint:fix -> build -> test:unit |
 | `/precommit-fast` | lint:fix -> test:unit |
 | `/dep-audit` | Dependency security audit |
@@ -243,7 +245,7 @@ flowchart LR
 | `/pr-review` | PR self-review |
 | `/skill-health-check` | Validate skill quality and routing |
 | `/claude-health` | Claude Code config health check |
-| `/zh-tw` | Rewrite in Traditional Chinese |
+| `/zh-cn` | Rewrite in Simplified Chinese |
 
 ## Rules
 
@@ -315,9 +317,9 @@ Command (entry) -> Skill (capability) -> Agent (environment)
 
 ### Script Fallback
 
-Verification commands (`/precommit`, `/verify`, `/dep-audit`) use a **Try → Fallback** pattern:
+Verification and analysis commands (`/precommit`, `/verify`, `/dep-audit`, `/defi-tx-decode`) use a **Try → Fallback** pattern:
 
-1. **Try**: If a runner script exists in the project root (`scripts/precommit-runner.js`, etc.), use it for fast, deterministic execution.
+1. **Try**: If a runner script exists in the project root (`scripts/precommit-runner.js`, `scripts/tx-decode-runner.js`, etc.), use it for fast, deterministic execution.
 2. **Fallback**: If no script is found, Claude detects the project ecosystem (Node.js, Python, Rust, Go, Java) and runs the appropriate commands directly.
 
 The fallback works out of the box with no setup required. Runner scripts are bundled in this plugin repo but cannot be auto-resolved from plugin commands due to a [Claude Code limitation](https://github.com/anthropics/claude-code/issues/9354) (`${CLAUDE_PLUGIN_ROOT}` is unavailable in command markdown). This will be updated when the upstream issue is resolved.

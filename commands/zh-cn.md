@@ -1,11 +1,11 @@
 ---
-description: Rewrite the previous reply in Traditional Chinese
+description: Rewrite the previous reply in Simplified Chinese
 argument-hint: [specify content, e.g. "the report above" or "Codex review results"]
 ---
 
 ## Task
 
-Rewrite English or Simplified Chinese content from the conversation into **Traditional Chinese**.
+Rewrite English or Traditional Chinese content from the conversation into **Simplified Chinese**.
 
 ### Arguments
 
@@ -24,15 +24,15 @@ $ARGUMENTS
 
 | Item     | Description                                                         |
 | -------- | ------------------------------------------------------------------- |
-| Language | Traditional Chinese (Taiwan usage)                                  |
+| Language | Simplified Chinese (Mainland China usage)                           |
 | Terms    | Keep technical terms, code, and filenames in original language      |
 | Format   | Preserve original markdown format (tables, code blocks, lists, etc) |
 | Content  | Full rewrite, do not omit any part                                  |
 
 ### Conversion Rules
 
-- Simplified Chinese -> Traditional Chinese (vocabulary conversion, not just font)
-- English descriptions -> Traditional Chinese
+- Traditional Chinese -> Simplified Chinese (vocabulary conversion, not just font)
+- English descriptions -> Simplified Chinese
 - Maintain technical term consistency
 
 ### Execution

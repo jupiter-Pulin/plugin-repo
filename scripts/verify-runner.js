@@ -49,6 +49,7 @@ function parseArgs(argv) {
     tailSuccess: 25,
     tailFailure: 120,
     integration: '',
+    fork: '',
     e2e: '',
   };
   for (let i = 0; i < argv.length; i++) {
@@ -63,6 +64,7 @@ function parseArgs(argv) {
     if (k === '--tail-failure' && v)
       args.tailFailure = parseInt(v, 10) || args.tailFailure;
     if (k === '--integration' && v) args.integration = v;
+    if (k === '--fork' && v) args.fork = v;
     if (k === '--e2e' && v) args.e2e = v;
   }
   return args;
@@ -193,6 +195,25 @@ async function main() {
     } else {
       steps.push({
         name: 'test_integration',
+        status: 'skip',
+        reason: 'script missing',
+      });
+    }
+    if (hasScript(pkg, 'test:fork')) {
+      if (args.fork) {
+        const [cmd, cmdArgs] = pmCommand(pm, 'test:fork', [args.fork]);
+        steps.push({ name: 'test_fork', cmd, args: cmdArgs, stdoutFilter: testStdoutFilter });
+        commands.push([cmd, ...cmdArgs].join(' '));
+      } else {
+        steps.push({
+          name: 'test_fork',
+          status: 'skip',
+          reason: 'file not specified (use --fork <path>)',
+        });
+      }
+    } else {
+      steps.push({
+        name: 'test_fork',
         status: 'skip',
         reason: 'script missing',
       });

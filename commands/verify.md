@@ -1,5 +1,5 @@
 ---
-description: Verification loop — lint -> typecheck -> unit -> integration -> e2e
+description: Verification loop — lint -> typecheck -> unit -> integration -> fork -> e2e
 argument-hint: [fast|full]
 allowed-tools: Bash(node:*), Bash(pnpm:*), Bash(yarn:*), Bash(npm:*), Bash(npx:*), Bash(git:*), Read, Grep, Glob
 intent:
@@ -25,6 +25,12 @@ intent:
     - name: test-integration
       goal: Run integration tests
       preferred: ["test:integration"]
+      skip-if-missing: true
+      safety: read-only
+      mode: full-only
+    - name: test-fork
+      goal: Run fork tests (on-chain simulation)
+      preferred: ["test:fork"]
       skip-if-missing: true
       safety: read-only
       mode: full-only
@@ -71,7 +77,7 @@ For Node.js projects, auto-detect package manager from lockfile. Read `package.j
 
 **`$ARGUMENTS` == "fast"**: lint + unit only
 
-**Otherwise (full)**: lint -> typecheck -> unit -> integration -> e2e
+**Otherwise (full)**: lint -> typecheck -> unit -> integration -> fork -> e2e
 
 | Step | package.json script | If missing |
 |------|-------|------------|
@@ -79,6 +85,7 @@ For Node.js projects, auto-detect package manager from lockfile. Read `package.j
 | typecheck | `typecheck` | Skip with note |
 | unit | `test:unit`, fallback to `test` | Skip with note |
 | integration | `test:integration` | Skip (requires explicit path) |
+| fork | `test:fork` | Skip (requires explicit path) |
 | e2e | `test:e2e` | Skip (requires explicit path) |
 
 Integration/E2E default to single file only; specify path explicitly:
@@ -86,6 +93,8 @@ Integration/E2E default to single file only; specify path explicitly:
 ```bash
 # Example: run a specific integration test
 {PM} test:integration -- test/integration/xxx.test.ts
+# Example: run a specific fork test
+{PM} test:fork -- test/protocol/USDC/USDC.fork.test.ts
 # Example: run a specific e2e test
 {PM} test:e2e -- test/e2e/xxx.test.ts
 ```
@@ -98,6 +107,7 @@ Integration/E2E default to single file only; specify path explicitly:
 | No `typecheck` script | Skip, log "no typecheck script — skipped" |
 | No `test:unit` or `test` script | Skip, log "no test script — skipped" |
 | No `test:integration` script | Skip (only runs when explicitly specified) |
+| No `test:fork` script | Skip (only runs when explicitly specified) |
 | No `test:e2e` script | Skip (only runs when explicitly specified) |
 | No `package.json` | Report error, cannot run checks |
 
@@ -127,6 +137,7 @@ For **full** mode:
 | typecheck   | ✅/❌/⏭️ | |
 | unit        | ✅/❌/⏭️ | |
 | integration | ✅/❌/⏭️ | skipped unless path specified |
+| fork        | ✅/❌/⏭️ | skipped unless path specified |
 | e2e         | ✅/❌/⏭️ | skipped unless path specified |
 
 ## Failures (if any)

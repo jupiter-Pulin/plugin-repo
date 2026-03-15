@@ -84,7 +84,7 @@ Coverage: happy path + error handling + edge cases (null, empty, extremes)
 | `/create-skill` | Create new skills | Tooling |
 | `/simplify` | Code simplification | Refactoring |
 | `/de-ai-flavor` | Remove AI artifacts | Doc changes |
-| `/zh-tw` | Rewrite in Traditional Chinese | i18n |
+| `/zh-cn` | Rewrite in Simplified Chinese | i18n |
 | `/install-rules` | Install plugin rules to .claude/rules/ | Onboarding |
 | `/install-hooks` | Install plugin hooks to .claude/ | Onboarding |
 | `/project-setup` | Auto-detect and configure project | Onboarding |
@@ -96,6 +96,7 @@ Coverage: happy path + error handling + edge cases (null, empty, extremes)
 2. **Test command** -- `{TEST_COMMAND}`
 3. **Author attribution** -- use developer's GitHub username, never AI names
 4. **No auto-commit** -- Claude must not run `git add`, `git commit`, `git push`
+5. **Command execution** -- When user imperatively requests a `/command` (any installed command, at start, end, or inline), Claude MUST invoke it via the Skill tool. Surrounding text is the command's arguments/context. Do NOT execute when: negated (`don't run /x`), questioned (`what does /x do?`), inside code fences/inline code, or in comparative/educational discussion. Multiple commands: execute left-to-right, skip unrecognized ones with explanation.
 
 ## Tech Stack
 

@@ -270,7 +270,7 @@ function detectOrphans(skillNames, commandFiles) {
   // Orphan commands (no skill reference, excluding known utility-only)
   const utilityCommands = new Set([
     'precommit', 'precommit-fast', 'verify', 'simplify',
-    'doc-refactor', 'zh-tw', 'pr-review', 'install-hooks',
+    'doc-refactor', 'zh-cn', 'pr-review', 'install-hooks',
     'install-rules', 'update-docs', 'project-brief',
   ]);
 

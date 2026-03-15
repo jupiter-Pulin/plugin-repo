@@ -4,11 +4,11 @@
 
 [Claude Code](https://claude.com/claude-code)용 개발 워크플로 플러그인. Codex MCP 연동은 선택 사항입니다.
 
-90개 이상의 도구로 코드 리뷰, 테스트, 이슈 조사, 보안 감사, DevOps 자동화를 지원합니다.
+100개 이상의 도구로 코드 리뷰, 테스트, 이슈 조사, 보안 감사, DeFi 온체인 분석, DevOps 자동화를 지원합니다.
 
 ## 최소한의 Context 사용량
 
-본 플러그인은 Claude의 200k Context Window 중 **~4%** 만 사용하면서 90개 이상의 도구를 제공합니다. 이는 핵심적인 아키텍처 장점입니다.
+본 플러그인은 Claude의 200k Context Window 중 **~4%** 만 사용하면서 100개 이상의 도구를 제공합니다. 이는 핵심적인 아키텍처 장점입니다.
 
 | 구성 요소 | 토큰 수 | 200k 대비 비율 |
 |-----------|---------|---------------|
@@ -55,12 +55,12 @@
 
 | 카테고리 | 수량 | 예시 |
 |----------|------|------|
-| Commands | 47 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
-| Skills | 31 | project-setup, code-explore, next-step, skill-health-check |
+| Commands | 50 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
+| Skills | 34 | project-setup, code-explore, next-step, skill-health-check |
 | Agents | 14 | strict-reviewer, verify-app, coverage-analyst |
 | Hooks | 5 | pre-edit-guard, auto-format, review state tracking, stop guard, namespace hint |
 | Rules | 10 | auto-loop, codex-invocation, security, testing, git-workflow |
-| Scripts | 4 | precommit runner, verify runner, dep audit, namespace hint |
+| Scripts | 5 | precommit runner, verify runner, dep audit, namespace hint, tx-decode runner |
 
 ## 워크플로
 
@@ -192,6 +192,8 @@ flowchart LR
 | `/feature-verify` | 시스템 진단 (읽기 전용 검증, 이중 관점 확인) |
 | `/code-investigate` | 이중 관점 코드 조사 (Claude + Codex 독립 탐색) |
 | `/next-step` | 컨텍스트 인식 다음 단계 어드바이저 |
+| `/defi-onchain-balance` | ERC-20 토큰 보유자 잔액 조회 (Top-N 또는 범위 스캔) |
+| `/defi-tx-decode` | 온체인 트랜잭션 디코딩 및 자금 흐름 분석 |
 
 ### 리뷰 (Codex MCP)
 
@@ -211,7 +213,7 @@ flowchart LR
 
 | 명령어 | 설명 |
 |--------|------|
-| `/verify` | lint -> typecheck -> unit -> integration -> e2e |
+| `/verify` | lint -> typecheck -> unit -> integration -> fork -> e2e |
 | `/precommit` | lint:fix -> build -> test:unit |
 | `/precommit-fast` | lint:fix -> test:unit |
 | `/dep-audit` | 디펜던시 보안 감사 |
@@ -243,7 +245,7 @@ flowchart LR
 | `/pr-review` | PR 셀프 리뷰 |
 | `/skill-health-check` | 스킬 품질 및 라우팅 검증 |
 | `/claude-health` | Claude Code 설정 상태 점검 |
-| `/zh-tw` | 번체 중국어로 변환 |
+| `/zh-cn` | 간체 중국어로 변환 |
 
 ## Rules
 
@@ -315,9 +317,9 @@ Command (진입점) -> Skill (기능) -> Agent (실행 환경)
 
 ### 스크립트 폴백
 
-검증 명령어(`/precommit`, `/verify`, `/dep-audit`)는 **Try → Fallback** 패턴을 사용합니다:
+검증 명령어(`/precommit`, `/verify`, `/dep-audit`, `/defi-tx-decode`)는 **Try → Fallback** 패턴을 사용합니다:
 
-1. **Try**: 프로젝트 루트에 러너 스크립트(`scripts/precommit-runner.js` 등)가 있으면 이를 실행하여 빠르고 재현 가능한 결과를 얻습니다.
+1. **Try**: 프로젝트 루트에 러너 스크립트(`scripts/precommit-runner.js`, `scripts/tx-decode-runner.js` 등)가 있으면 이를 실행하여 빠르고 재현 가능한 결과를 얻습니다.
 2. **Fallback**: 스크립트가 없으면 Claude가 프로젝트 에코시스템(Node.js, Python, Rust, Go, Java)을 자동 감지하고 적절한 명령어를 직접 실행합니다.
 
 Fallback은 별도 설정 없이 바로 사용 가능합니다. 러너 스크립트는 본 플러그인에 포함되어 있지만, [Claude Code의 알려진 제한](https://github.com/anthropics/claude-code/issues/9354)(`${CLAUDE_PLUGIN_ROOT}`가 커맨드 마크다운에서 사용 불가)으로 인해 현재 플러그인 명령어에서 스크립트 경로를 자동 해석할 수 없습니다. 업스트림 이슈가 해결되면 업데이트 예정입니다.

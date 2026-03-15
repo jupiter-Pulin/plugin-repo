@@ -4,11 +4,11 @@
 
 Plugin de workflow de desarrollo para [Claude Code](https://claude.com/claude-code) con integración opcional de Codex MCP.
 
-Más de 90 herramientas para code review, testing, investigación, auditoría de seguridad y automatización DevOps.
+Más de 100 herramientas para code review, testing, investigación, auditoría de seguridad, análisis DeFi on-chain y automatización DevOps.
 
 ## Mínimo consumo de Context
 
-Este plugin ocupa solo **~4% de la ventana de 200k tokens de Context** de Claude, proporcionando más de 90 herramientas — una ventaja arquitectónica clave.
+Este plugin ocupa solo **~4% de la ventana de 200k tokens de Context** de Claude, proporcionando más de 100 herramientas — una ventaja arquitectónica clave.
 
 | Componente | Tokens | % de 200k |
 |------------|--------|-----------|
@@ -55,12 +55,12 @@ Detecta framework, package manager, base de datos, entry points y scripts, y act
 
 | Categoría | Cantidad | Ejemplos |
 |-----------|----------|----------|
-| Commands | 47 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
-| Skills | 31 | project-setup, code-explore, next-step, skill-health-check |
+| Commands | 50 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
+| Skills | 34 | project-setup, code-explore, next-step, skill-health-check |
 | Agents | 14 | strict-reviewer, verify-app, coverage-analyst |
 | Hooks | 5 | pre-edit-guard, auto-format, review state tracking, stop guard, namespace hint |
 | Rules | 10 | auto-loop, codex-invocation, security, testing, git-workflow |
-| Scripts | 4 | precommit runner, verify runner, dep audit, namespace hint |
+| Scripts | 5 | precommit runner, verify runner, tx-decode runner, dep audit, namespace hint |
 
 ## Workflow
 
@@ -192,6 +192,8 @@ flowchart LR
 | `/feature-verify` | Diagnóstico de sistema (verificación de solo lectura, doble perspectiva) |
 | `/code-investigate` | Investigación de código con doble perspectiva (Claude + Codex independientes) |
 | `/next-step` | Asesor contextual de siguiente paso |
+| `/defi-onchain-balance` | Consultar saldos de titulares de tokens ERC-20 (Top-N o escaneo por rango) |
+| `/defi-tx-decode` | Decodificar transacciones on-chain con análisis de flujo de fondos |
 
 ### Review (Codex MCP)
 
@@ -211,7 +213,7 @@ flowchart LR
 
 | Comando | Descripción |
 |---------|-------------|
-| `/verify` | lint -> typecheck -> unit -> integration -> e2e |
+| `/verify` | lint -> typecheck -> unit -> integration -> fork -> e2e |
 | `/precommit` | lint:fix -> build -> test:unit |
 | `/precommit-fast` | lint:fix -> test:unit |
 | `/dep-audit` | Auditoría de seguridad de dependencias |
@@ -243,7 +245,7 @@ flowchart LR
 | `/pr-review` | Self-review de PR |
 | `/skill-health-check` | Validar calidad y routing de skills |
 | `/claude-health` | Verificación de configuración de Claude Code |
-| `/zh-tw` | Reescribir en chino tradicional |
+| `/zh-cn` | Reescribir en chino simplificado |
 
 ## Rules
 
@@ -315,9 +317,9 @@ Command (entrada) -> Skill (capacidad) -> Agent (entorno)
 
 ### Fallback de scripts
 
-Los comandos de verificación (`/precommit`, `/verify`, `/dep-audit`) usan un patrón **Try → Fallback**:
+Los comandos de verificación (`/precommit`, `/verify`, `/dep-audit`, `/defi-tx-decode`) usan un patrón **Try → Fallback**:
 
-1. **Try**: Si existe un script de ejecución en la raíz del proyecto (`scripts/precommit-runner.js`, etc.), se ejecuta para obtener resultados rápidos y reproducibles.
+1. **Try**: Si existe un script de ejecución en la raíz del proyecto (`scripts/precommit-runner.js`, `scripts/tx-decode-runner.js`, etc.), se ejecuta para obtener resultados rápidos y reproducibles.
 2. **Fallback**: Si no se encuentra el script, Claude detecta el ecosistema del proyecto (Node.js, Python, Rust, Go, Java) y ejecuta los comandos correspondientes directamente.
 
 El fallback funciona sin ninguna configuración previa. Los scripts de ejecución están incluidos en este plugin, pero debido a una [limitación conocida de Claude Code](https://github.com/anthropics/claude-code/issues/9354) (`${CLAUDE_PLUGIN_ROOT}` no está disponible en el markdown de comandos), actualmente no se pueden resolver automáticamente las rutas de scripts desde comandos del plugin. Se actualizará cuando se resuelva el problema en upstream.

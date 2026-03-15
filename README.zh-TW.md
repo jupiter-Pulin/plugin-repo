@@ -4,11 +4,11 @@
 
 [Claude Code](https://claude.com/claude-code) 的開發 Workflow Plugin，可選整合 Codex MCP。
 
-90+ 個工具，涵蓋 Code Review、測試、調查、安全稽核與 DevOps 自動化。
+100+ 個工具，涵蓋 Code Review、測試、調查、安全稽核、DeFi 鏈上分析與 DevOps 自動化。
 
 ## 極小的 Context 佔用
 
-本 Plugin 僅佔用 Claude 200k Context Window 的 **~4%**，同時提供 90+ 個工具——這是核心架構優勢。
+本 Plugin 僅佔用 Claude 200k Context Window 的 **~4%**，同時提供 100+ 個工具——這是核心架構優勢。
 
 | 組件 | Tokens | 佔 200k 比例 |
 |------|--------|-------------|
@@ -55,12 +55,12 @@
 
 | 類別 | 數量 | 範例 |
 |------|------|------|
-| Commands | 47 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
-| Skills | 31 | project-setup, code-explore, next-step, skill-health-check |
+| Commands | 50 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step`, `/defi-tx-decode` |
+| Skills | 34 | project-setup, code-explore, next-step, skill-health-check, defi-onchain-balance, defi-tx-decode |
 | Agents | 14 | strict-reviewer, verify-app, coverage-analyst |
 | Hooks | 5 | pre-edit-guard, auto-format, review state tracking, stop guard, namespace hint |
 | Rules | 10 | auto-loop, codex-invocation, security, testing, git-workflow |
-| Scripts | 4 | precommit runner, verify runner, dep audit, namespace hint |
+| Scripts | 5 | precommit runner, verify runner, dep audit, namespace hint, tx-decode runner |
 
 ## Workflow
 
@@ -192,6 +192,8 @@ flowchart LR
 | `/feature-verify` | 系統診斷（唯讀驗證，雙視角確認） |
 | `/code-investigate` | 雙視角程式碼調查（Claude + Codex 獨立探索） |
 | `/next-step` | 情境感知的下一步建議 |
+| `/defi-onchain-balance` | 查詢 ERC-20 代幣持有者餘額（Top-N 或範圍掃描） |
+| `/defi-tx-decode` | 解碼鏈上交易並分析資金流向 |
 
 ### Review（Codex MCP）
 
@@ -211,7 +213,7 @@ flowchart LR
 
 | 指令 | 說明 |
 |------|------|
-| `/verify` | lint -> typecheck -> unit -> integration -> e2e |
+| `/verify` | lint -> typecheck -> unit -> integration -> fork -> e2e |
 | `/precommit` | lint:fix -> build -> test:unit |
 | `/precommit-fast` | lint:fix -> test:unit |
 | `/dep-audit` | 依賴套件安全稽核 |
@@ -243,7 +245,7 @@ flowchart LR
 | `/pr-review` | PR self-review |
 | `/skill-health-check` | 驗證 Skill 品質與 routing |
 | `/claude-health` | Claude Code 設定健康檢查 |
-| `/zh-tw` | 以繁體中文改寫 |
+| `/zh-cn` | 以簡體中文改寫 |
 
 ## Rules
 
@@ -315,9 +317,9 @@ Command（入口）-> Skill（能力）-> Agent（環境）
 
 ### 腳本備援機制
 
-驗證指令（`/precommit`、`/verify`、`/dep-audit`）採用 **Try → Fallback** 模式：
+驗證指令（`/precommit`、`/verify`、`/dep-audit`、`/defi-tx-decode`）採用 **Try → Fallback** 模式：
 
-1. **Try**：若專案根目錄存在 runner 腳本（`scripts/precommit-runner.js` 等），直接執行以獲得快速、可重現的結果。
+1. **Try**：若專案根目錄存在 runner 腳本（`scripts/precommit-runner.js`、`scripts/tx-decode-runner.js` 等），直接執行以獲得快速、可重現的結果。
 2. **Fallback**：若腳本不存在，Claude 會自動偵測專案生態系（Node.js、Python、Rust、Go、Java）並直接執行對應指令。
 
 Fallback 無需任何設定即可使用。Runner 腳本雖包含在本外掛中，但由於 [Claude Code 的已知限制](https://github.com/anthropics/claude-code/issues/9354)（`${CLAUDE_PLUGIN_ROOT}` 在指令 markdown 中無法使用），目前無法從外掛指令中自動解析腳本路徑。待上游問題修復後將同步更新。

@@ -4,11 +4,11 @@
 
 [Claude Code](https://claude.com/claude-code) 向け開発ワークフロープラグイン。Codex MCP 連携はオプションです。
 
-90以上のツールでコードレビュー、テスト、調査、セキュリティ監査、DevOps 自動化をカバー。
+100以上のツールでコードレビュー、テスト、調査、セキュリティ監査、DevOps 自動化、DeFi オンチェーン分析をカバー。
 
 ## 極小の Context 使用量
 
-本プラグインは Claude の 200k Context Window のわずか **~4%** で 90 以上のツールを提供します。これは重要なアーキテクチャ上の優位性です。
+本プラグインは Claude の 200k Context Window のわずか **~4%** で 100 以上のツールを提供します。これは重要なアーキテクチャ上の優位性です。
 
 | コンポーネント | トークン数 | 200k に対する割合 |
 |---------------|-----------|-----------------|
@@ -55,12 +55,12 @@
 
 | カテゴリ | 数 | 例 |
 |----------|-----|-----|
-| コマンド | 47 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
-| スキル | 31 | project-setup, code-explore, next-step, skill-health-check |
+| コマンド | 50 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
+| スキル | 34 | project-setup, code-explore, next-step, skill-health-check |
 | エージェント | 14 | strict-reviewer, verify-app, coverage-analyst |
 | フック | 5 | pre-edit-guard, auto-format, review state tracking, stop guard, namespace hint |
 | ルール | 10 | auto-loop, codex-invocation, security, testing, git-workflow |
-| スクリプト | 4 | precommit runner, verify runner, dep audit, namespace hint |
+| スクリプト | 5 | precommit runner, verify runner, dep audit, namespace hint, tx-decode runner |
 
 ## ワークフロー
 
@@ -192,6 +192,8 @@ flowchart LR
 | `/feature-verify` | システム診断（読み取り専用の検証、デュアル視点確認） |
 | `/code-investigate` | デュアル視点コード調査（Claude + Codex 独立探索） |
 | `/next-step` | コンテキスト認識型の次ステップアドバイザー |
+| `/defi-onchain-balance` | ERC-20 トークン保有者の残高クエリ（Top-N またはレンジスキャン） |
+| `/defi-tx-decode` | オンチェーントランザクションのデコードと資金フロー分析 |
 
 ### レビュー（Codex MCP）
 
@@ -211,7 +213,7 @@ flowchart LR
 
 | コマンド | 説明 |
 |----------|------|
-| `/verify` | lint -> typecheck -> unit -> integration -> e2e |
+| `/verify` | lint -> typecheck -> unit -> integration -> fork -> e2e |
 | `/precommit` | lint:fix -> build -> test:unit |
 | `/precommit-fast` | lint:fix -> test:unit |
 | `/dep-audit` | 依存パッケージのセキュリティ監査 |
@@ -243,7 +245,7 @@ flowchart LR
 | `/pr-review` | PR セルフレビュー |
 | `/skill-health-check` | スキル品質とルーティングの検証 |
 | `/claude-health` | Claude Code 設定のヘルスチェック |
-| `/zh-tw` | 繁体字中国語に書き換え |
+| `/zh-cn` | 簡体字中国語に書き換え |
 
 ## ルール
 
@@ -315,9 +317,9 @@ flowchart LR
 
 ### スクリプトフォールバック
 
-検証コマンド（`/precommit`、`/verify`、`/dep-audit`）は **Try → Fallback** パターンを採用しています：
+検証コマンド（`/precommit`、`/verify`、`/dep-audit`、`/defi-tx-decode`）は **Try → Fallback** パターンを採用しています：
 
-1. **Try**：プロジェクトルートにランナースクリプト（`scripts/precommit-runner.js` など）が存在する場合、それを実行して高速かつ再現性のある結果を得ます。
+1. **Try**：プロジェクトルートにランナースクリプト（`scripts/precommit-runner.js`、`scripts/tx-decode-runner.js` など）が存在する場合、それを実行して高速かつ再現性のある結果を得ます。
 2. **Fallback**：スクリプトが存在しない場合、Claude がプロジェクトのエコシステム（Node.js、Python、Rust、Go、Java）を自動検出し、適切なコマンドを直接実行します。
 
 Fallback はセットアップ不要でそのまま使えます。ランナースクリプトは本プラグインに同梱されていますが、[Claude Code の既知の制限](https://github.com/anthropics/claude-code/issues/9354)（`${CLAUDE_PLUGIN_ROOT}` がコマンド markdown で利用不可）により、プラグインコマンドからスクリプトパスを自動解決できません。上流の問題が解決され次第更新予定です。

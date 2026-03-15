@@ -4,11 +4,11 @@
 
 [Claude Code](https://claude.com/claude-code) 开发工作流插件，可选集成 Codex MCP。
 
-90+ 个工具，覆盖代码审查、测试、问题排查、安全审计与 DevOps 自动化。
+100+ 个工具，覆盖代码审查、测试、问题排查、安全审计、DeFi 链上分析与 DevOps 自动化。
 
 ## 极小的 Context 占用
 
-本插件仅占用 Claude 200k Context Window 的 **~4%**，同时提供 90+ 个工具——这是核心架构优势。
+本插件仅占用 Claude 200k Context Window 的 **~4%**，同时提供 100+ 个工具——这是核心架构优势。
 
 | 组件 | Tokens | 占 200k 比例 |
 |------|--------|-------------|
@@ -55,12 +55,12 @@
 
 | 类别 | 数量 | 示例 |
 |------|------|------|
-| 命令 | 47 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
-| 技能 | 31 | project-setup, code-explore, next-step, skill-health-check |
+| 命令 | 50 | `/project-setup`, `/codex-review-fast`, `/verify`, `/next-step` |
+| 技能 | 34 | project-setup, code-explore, next-step, skill-health-check |
 | 代理 | 14 | strict-reviewer, verify-app, coverage-analyst |
 | 钩子 | 5 | pre-edit-guard, auto-format, review state tracking, stop guard, namespace hint |
 | 规则 | 10 | auto-loop, codex-invocation, security, testing, git-workflow |
-| 脚本 | 4 | precommit runner, verify runner, dep audit, namespace hint |
+| 脚本 | 5 | precommit runner, verify runner, dep audit, namespace hint, tx-decode runner |
 
 ## 工作流
 
@@ -192,6 +192,8 @@ flowchart LR
 | `/feature-verify` | 系统诊断（只读验证，双视角确认） |
 | `/code-investigate` | 双视角代码调查（Claude + Codex 独立探索） |
 | `/next-step` | 情境感知的下一步建议 |
+| `/defi-onchain-balance` | 查询 ERC-20 代币持有者余额（Top-N 或范围扫描） |
+| `/defi-tx-decode` | 解码链上交易并分析资金流向 |
 
 ### 审查（Codex MCP）
 
@@ -211,7 +213,7 @@ flowchart LR
 
 | 命令 | 说明 |
 |------|------|
-| `/verify` | lint -> typecheck -> unit -> integration -> e2e |
+| `/verify` | lint -> typecheck -> unit -> integration -> fork -> e2e |
 | `/precommit` | lint:fix -> build -> test:unit |
 | `/precommit-fast` | lint:fix -> test:unit |
 | `/dep-audit` | 依赖安全审计 |
@@ -243,7 +245,7 @@ flowchart LR
 | `/pr-review` | PR 自查 |
 | `/skill-health-check` | 验证 Skill 质量与 routing |
 | `/claude-health` | Claude Code 配置健康检查 |
-| `/zh-tw` | 改写为繁体中文 |
+| `/zh-cn` | 改写为简体中文 |
 
 ## 规则
 
@@ -315,9 +317,9 @@ flowchart LR
 
 ### 脚本回退机制
 
-验证命令（`/precommit`、`/verify`、`/dep-audit`）采用 **Try → Fallback** 模式：
+验证命令（`/precommit`、`/verify`、`/dep-audit`、`/defi-tx-decode`）采用 **Try → Fallback** 模式：
 
-1. **Try**：如果项目根目录存在 runner 脚本（`scripts/precommit-runner.js` 等），直接执行以获得快速、确定性的结果。
+1. **Try**：如果项目根目录存在 runner 脚本（`scripts/precommit-runner.js`、`scripts/tx-decode-runner.js` 等），直接执行以获得快速、确定性的结果。
 2. **Fallback**：如果脚本不存在，Claude 会自动检测项目生态系统（Node.js、Python、Rust、Go、Java）并直接运行相应命令。
 
 Fallback 开箱即用，无需任何配置。Runner 脚本虽然包含在本插件中，但由于 [Claude Code 的已知限制](https://github.com/anthropics/claude-code/issues/9354)（`${CLAUDE_PLUGIN_ROOT}` 在命令 markdown 中不可用），目前无法从插件命令中自动解析脚本路径。上游问题修复后将同步更新。
