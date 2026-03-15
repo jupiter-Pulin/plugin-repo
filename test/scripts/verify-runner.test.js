@@ -108,7 +108,7 @@ test('verify runner full mode', () => {
   assert.equal(summary.overallPass, true);
   assert.deepEqual(
     summary.steps.map(step => step.name),
-    ['lint', 'typecheck', 'test_unit', 'test_integration', 'test_e2e']
+    ['lint', 'typecheck', 'test_unit', 'test_integration', 'test_fork', 'test_e2e']
   );
 });
 
