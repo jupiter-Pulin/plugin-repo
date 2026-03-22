@@ -255,7 +255,7 @@ test_review_state_mcp_code_pass() {
 }
 EOF
 
-  echo '{"tool_name":"mcp__codex__codex","tool_input":{},"tool_response":{"content":"Review complete\n✅ Ready to merge"}}' \
+  echo '{"tool_name":"mcp__codex__codex","tool_input":{},"tool_response":"{\"threadId\":\"test\",\"content\":\"Review complete\\n\\n✅ Ready to merge\"}"}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
 
   local state
