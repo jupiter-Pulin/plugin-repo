@@ -14,7 +14,70 @@
 
 set -euo pipefail
 
+# === Plugin-defers-to-local arbitration ===
+# When running as a plugin hook, detect if identical local hook is installed
+# and registered in project settings — if so, exit 0 to avoid double-fire.
+# Dev-mode bypass: hooks/hooks.json at project root = plugin source repo (skip arbitration).
+_SELF_NAME="$(basename "$0")"
+if [[ -n "${CLAUDE_PROJECT_DIR:-}" ]] \
+   && [[ ! -f "${CLAUDE_PROJECT_DIR}/hooks/hooks.json" ]] \
+   && [[ -x "${CLAUDE_PROJECT_DIR}/.claude/hooks/${_SELF_NAME}" ]]; then
+  _SETTINGS_MATCH=false
+  for _sf in "${CLAUDE_PROJECT_DIR}/.claude/settings.json" \
+             "${CLAUDE_PROJECT_DIR}/.claude/settings.local.json"; do
+    if [[ -f "$_sf" ]]; then
+      if command -v jq &>/dev/null; then
+        jq -e '.hooks // {} | .. | strings | select(contains(".claude/hooks/'"${_SELF_NAME}"'"))' "$_sf" >/dev/null 2>&1 \
+          && _SETTINGS_MATCH=true && break
+      else
+        grep -q "\.claude/hooks/${_SELF_NAME}" "$_sf" 2>/dev/null \
+          && _SETTINGS_MATCH=true && break
+      fi
+    fi
+  done
+  if [[ "$_SETTINGS_MATCH" == "true" ]]; then
+    exit 0  # Defer to local hook
+  fi
+fi
+
 STATE_FILE=".claude_review_state.json"
+
+# === Portable mkdir locking (shared protocol with post-tool-review-state.sh) ===
+LOCKDIR="${STATE_FILE}.lockdir"
+LOCK_TIMEOUT=5
+LOCK_TTL=30
+HAVE_LOCK=0
+
+_lock() {
+  local start end
+  start=$(date +%s)
+  while ! mkdir "$LOCKDIR" 2>/dev/null; do
+    end=$(date +%s)
+    if [ $((end - start)) -ge $LOCK_TIMEOUT ]; then
+      local lock_pid lock_ts now
+      lock_pid=$(cat "$LOCKDIR/pid" 2>/dev/null || echo 0)
+      lock_ts=$(cat "$LOCKDIR/ts" 2>/dev/null || echo 0)
+      now=$(date +%s)
+      # Stale recovery: TTL expired OR owner PID dead
+      if [ $((now - lock_ts)) -ge $LOCK_TTL ] || ! kill -0 "$lock_pid" 2>/dev/null; then
+        rm -rf "$LOCKDIR" 2>/dev/null
+        mkdir "$LOCKDIR" 2>/dev/null && break
+      fi
+      return 1  # lock failure triggers fail-closed sidecar marker in caller
+    fi
+    sleep 0.1
+  done
+  echo "$$" > "$LOCKDIR/pid"
+  date +%s > "$LOCKDIR/ts"
+  HAVE_LOCK=1
+}
+
+_unlock() {
+  [ "$HAVE_LOCK" -eq 1 ] && rm -rf "$LOCKDIR" 2>/dev/null
+  HAVE_LOCK=0
+}
+
+trap '_unlock' EXIT
 
 INPUT=$(cat)
 
@@ -79,11 +142,13 @@ init_state_file() {
 {
   "session_id": "",
   "updated_at": "",
+  "review_mode": "single",
   "has_code_change": false,
   "has_doc_change": false,
   "code_review": {"executed": false, "passed": false, "last_run": ""},
   "doc_review": {"executed": false, "passed": false, "last_run": ""},
-  "precommit": {"executed": false, "passed": false, "last_run": ""}
+  "precommit": {"executed": false, "passed": false, "last_run": ""},
+  "aggregate_gate": {"executed": false, "gate": null, "source": null, "reason": null, "last_run": ""}
 }
 EOF
   fi
@@ -100,6 +165,21 @@ invalidate_review() {
   jq --arg key "$key" \
      '.[$key].passed = false' \
      "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
+}
+
+# Reset aggregate_gate on edit (invalidates dual-review results)
+invalidate_aggregate_gate() {
+  if [[ ! -f "$STATE_FILE" ]]; then
+    return
+  fi
+  local has_agg
+  has_agg=$(jq 'has("aggregate_gate")' "$STATE_FILE" 2>/dev/null || echo "false")
+  if [[ "$has_agg" == "true" ]]; then
+    local tmp
+    tmp=$(mktemp)
+    jq '.aggregate_gate.executed = false | .aggregate_gate.gate = null | .aggregate_gate.reason = null' \
+       "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
+  fi
 }
 
 # Update state file for change tracking
@@ -120,38 +200,43 @@ update_change_flag() {
 
 # Track code changes (all recognized code extensions)
 if echo "$file_path" | grep -Eq '\.(ts|tsx|js|jsx|mjs|cjs|py|pyw|go|rs|java|kt|kts|rb|php|swift|c|cpp|cc|h|hpp|cs|scala|ex|exs)$'; then
-  update_change_flag "has_code_change"
-
-  # Smart invalidation: if code_review already passed and precommit was attempted
-  # but failed, this edit is likely a precommit fix → only invalidate precommit
-  skip_review_invalidation=false
-  if [[ -f "$STATE_FILE" ]]; then
-    cr_passed=$(jq -r '.code_review.passed // false' "$STATE_FILE" 2>/dev/null || echo "false")
-    pc_executed=$(jq -r '.precommit.executed // false' "$STATE_FILE" 2>/dev/null || echo "false")
-    pc_passed=$(jq -r '.precommit.passed // false' "$STATE_FILE" 2>/dev/null || echo "false")
-    if [[ "$cr_passed" == "true" && "$pc_executed" == "true" && "$pc_passed" == "false" ]]; then
-      skip_review_invalidation=true
-    fi
-  fi
-
-  if [[ "$skip_review_invalidation" == "true" ]]; then
-    invalidate_review "precommit"
-    echo "[Edit Hook] Precommit-fix edit detected: $file_path" >&2
-    echo "[Edit Hook] Only invalidated precommit (code_review preserved)" >&2
-  else
+  if _lock; then
+    update_change_flag "has_code_change"
     invalidate_review "code_review"
     invalidate_review "precommit"
+    invalidate_aggregate_gate
+    rm -f "${STATE_FILE}.blocked" 2>/dev/null || true
+    _unlock
     echo "[Edit Hook] Code change detected: $file_path" >&2
-    echo "[Edit Hook] Invalidated code_review + precommit passed" >&2
+    echo "[Edit Hook] Invalidated code_review + precommit + aggregate_gate" >&2
+  else
+    # Fail-closed: sidecar marker (atomic) + best-effort unlocked writes
+    echo "edit_lock_contention" > "${STATE_FILE}.blocked" 2>/dev/null || true
+    update_change_flag "has_code_change" 2>/dev/null || true
+    invalidate_review "code_review" 2>/dev/null || true
+    invalidate_review "precommit" 2>/dev/null || true
+    invalidate_aggregate_gate 2>/dev/null || true
+    echo "[Edit Hook] Code change detected (degraded — lock contention, sidecar marker set): $file_path" >&2
   fi
 fi
 
 # Track doc changes (.md, .mdx)
 if echo "$file_path" | grep -Eq '\.(md|mdx)$'; then
-  update_change_flag "has_doc_change"
-  invalidate_review "doc_review"
-  echo "[Edit Hook] Doc change detected: $file_path" >&2
-  echo "[Edit Hook] Invalidated doc_review passed" >&2
+  if _lock; then
+    update_change_flag "has_doc_change"
+    invalidate_review "doc_review"
+    invalidate_aggregate_gate
+    rm -f "${STATE_FILE}.blocked" 2>/dev/null || true
+    _unlock
+    echo "[Edit Hook] Doc change detected: $file_path" >&2
+    echo "[Edit Hook] Invalidated doc_review + aggregate_gate" >&2
+  else
+    echo "edit_lock_contention" > "${STATE_FILE}.blocked" 2>/dev/null || true
+    update_change_flag "has_doc_change" 2>/dev/null || true
+    invalidate_review "doc_review" 2>/dev/null || true
+    invalidate_aggregate_gate 2>/dev/null || true
+    echo "[Edit Hook] Doc change detected (degraded — lock contention, sidecar marker set): $file_path" >&2
+  fi
 fi
 
 exit 0

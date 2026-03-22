@@ -9,6 +9,15 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/namespace-hint.sh"
           }
         ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-compact-auto-loop.sh"
+          }
+        ]
       }
     ],
     "PreToolUse": [
