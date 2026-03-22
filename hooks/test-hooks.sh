@@ -221,6 +221,27 @@ EOF
   assert_eq "precommit.passed" "true" "$(echo "$state" | jq -r '.precommit.passed')"
 }
 
+test_review_state_precommit_runner_pass() {
+  cd "$TEST_DIR"
+  cat > .claude_review_state.json << 'EOF'
+{
+  "session_id": "", "updated_at": "", "review_mode": "single",
+  "has_code_change": true, "has_doc_change": false,
+  "code_review": {"executed": true, "passed": true, "last_run": ""},
+  "doc_review": {"executed": false, "passed": false, "last_run": ""},
+  "precommit": {"executed": false, "passed": false, "last_run": ""},
+  "aggregate_gate": {"executed": false, "gate": null, "source": null, "reason": null, "last_run": ""}
+}
+EOF
+
+  echo '{"tool_name":"Bash","tool_input":{"command":"node .claude/scripts/precommit-runner.js --mode full --tail 80"},"tool_response":{"stdout":"## Overall: ✅ PASS","stderr":"","interrupted":false}}' \
+    | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
+
+  local state
+  state=$(cat .claude_review_state.json)
+  assert_eq "precommit.passed (runner)" "true" "$(echo "$state" | jq -r '.precommit.passed')"
+}
+
 test_review_state_doc_review_pass() {
   cd "$TEST_DIR"
   cat > .claude_review_state.json << 'EOF'
@@ -615,6 +636,7 @@ echo "--- post-tool-review-state.sh ---"
 run_test test_review_state_code_review_pass "$FILTER"
 run_test test_review_state_code_review_fail "$FILTER"
 run_test test_review_state_precommit_pass "$FILTER"
+run_test test_review_state_precommit_runner_pass "$FILTER"
 run_test test_review_state_doc_review_pass "$FILTER"
 run_test test_review_state_mcp_code_pass "$FILTER"
 run_test test_review_state_aggregate_gate_ready "$FILTER"

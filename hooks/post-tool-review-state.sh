@@ -229,8 +229,8 @@ if echo "$COMMAND" | grep -qE '/(jupiter-dev-flow:)?codex-review-doc($|[[:space:
   echo "[Review State] doc_review updated: passed=$passed" >&2
 fi
 
-# /precommit or /precommit-fast
-if echo "$COMMAND" | grep -qE '/(jupiter-dev-flow:)?precommit(-fast)?($|\s)'; then
+# /precommit or /precommit-fast or precommit-runner script
+if echo "$COMMAND" | grep -qE '/(jupiter-dev-flow:)?precommit(-fast)?($|\s|-runner)'; then
   passed=$(check_passed "$TOOL_OUTPUT")
   update_state "precommit" "true" "$passed"
   echo "[Review State] precommit updated: passed=$passed" >&2
