@@ -169,7 +169,7 @@ test_review_state_code_review_pass() {
 }
 EOF
 
-  echo '{"tool_name":"Bash","tool_input":{"command":"/jupiter-dev-flow:codex-review-fast"},"tool_output":"## Gate: ✅\n✅ All Pass"}' \
+  echo '{"tool_name":"Bash","tool_input":{"command":"/jupiter-dev-flow:codex-review-fast"},"tool_response":{"stdout":"## Gate: ✅\n✅ All Pass","stderr":"","interrupted":false}}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
 
   local state
@@ -191,7 +191,7 @@ test_review_state_code_review_fail() {
 }
 EOF
 
-  echo '{"tool_name":"Bash","tool_input":{"command":"/codex-review-fast"},"tool_output":"## Gate: ⛔\n⛔ Blocked"}' \
+  echo '{"tool_name":"Bash","tool_input":{"command":"/codex-review-fast"},"tool_response":{"stdout":"## Gate: ⛔\n⛔ Blocked","stderr":"","interrupted":false}}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
 
   local state
@@ -213,7 +213,7 @@ test_review_state_precommit_pass() {
 }
 EOF
 
-  echo '{"tool_name":"Bash","tool_input":{"command":"/precommit-fast"},"tool_output":"## Overall: ✅ PASS"}' \
+  echo '{"tool_name":"Bash","tool_input":{"command":"/precommit-fast"},"tool_response":{"stdout":"## Overall: ✅ PASS","stderr":"","interrupted":false}}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
 
   local state
@@ -234,7 +234,7 @@ test_review_state_doc_review_pass() {
 }
 EOF
 
-  echo '{"tool_name":"Bash","tool_input":{"command":"/codex-review-doc"},"tool_output":"## Gate: ✅\n✅ All Pass"}' \
+  echo '{"tool_name":"Bash","tool_input":{"command":"/codex-review-doc"},"tool_response":{"stdout":"## Gate: ✅\n✅ All Pass","stderr":"","interrupted":false}}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
 
   local state
@@ -255,7 +255,7 @@ test_review_state_mcp_code_pass() {
 }
 EOF
 
-  echo '{"tool_name":"mcp__codex__codex","tool_input":{},"tool_output":"Review complete\n✅ Ready to merge"}' \
+  echo '{"tool_name":"mcp__codex__codex","tool_input":{},"tool_response":{"content":"Review complete\n✅ Ready to merge"}}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
 
   local state
@@ -276,7 +276,7 @@ test_review_state_aggregate_gate_ready() {
 }
 EOF
 
-  echo '{"tool_name":"Bash","tool_input":{"command":"emit-review-gate"},"tool_output":"REVIEW_GATE=READY"}' \
+  echo '{"tool_name":"Bash","tool_input":{"command":"emit-review-gate"},"tool_response":{"stdout":"REVIEW_GATE=READY","stderr":"","interrupted":false}}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null
 
   local state
@@ -288,7 +288,7 @@ EOF
 test_review_state_unrelated_bash_ignored() {
   cd "$TEST_DIR"
   local exit_code=0
-  echo '{"tool_name":"Bash","tool_input":{"command":"ls -la"},"tool_output":"total 0"}' \
+  echo '{"tool_name":"Bash","tool_input":{"command":"ls -la"},"tool_response":{"stdout":"total 0","stderr":"","interrupted":false}}' \
     | bash "$ORIG_DIR/hooks/post-tool-review-state.sh" 2>/dev/null || exit_code=$?
 
   assert_eq "exit_code" "0" "$exit_code" && \

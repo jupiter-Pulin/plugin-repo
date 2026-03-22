@@ -76,7 +76,9 @@ fi
 # Extract tool info
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)
 TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input // empty' 2>/dev/null)
-TOOL_OUTPUT=$(echo "$INPUT" | jq -r '.tool_output // empty' 2>/dev/null)
+# Claude Code sends tool output as .tool_response (not .tool_output)
+# For Bash: .tool_response.stdout contains the output text
+TOOL_OUTPUT=$(echo "$INPUT" | jq -r '.tool_response.stdout // empty' 2>/dev/null)
 
 # Only process Bash and MCP Codex tools
 if [[ "$TOOL_NAME" != "Bash" ]] && \
@@ -90,13 +92,14 @@ if [[ "$TOOL_NAME" == "Bash" ]]; then
   COMMAND=$(echo "$TOOL_INPUT" | jq -r '.command // empty' 2>/dev/null)
 else
   COMMAND=""
+  # Claude Code sends MCP results as .tool_response (object with .content or string)
   TOOL_OUTPUT=$(echo "$INPUT" | jq -r '
-    if (.tool_output | type) == "object" then
-      if (.tool_output.content | type) == "string" then .tool_output.content
-      elif (.tool_output.content | type) == "array" then [.tool_output.content[] | select(.type == "text") | .text] | join("\n")
-      else (.tool_output | tostring)
+    if (.tool_response | type) == "object" then
+      if (.tool_response.content | type) == "string" then .tool_response.content
+      elif (.tool_response.content | type) == "array" then [.tool_response.content[] | select(.type == "text") | .text] | join("\n")
+      else (.tool_response | tostring)
       end
-    elif (.tool_output | type) == "string" then .tool_output
+    elif (.tool_response | type) == "string" then .tool_response
     else empty
     end // empty' 2>/dev/null)
 fi
